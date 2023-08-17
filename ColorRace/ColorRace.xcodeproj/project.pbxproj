@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E41048132A8E286F0093F5BA /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E41048122A8E286F0093F5BA /* SocketIO */; };
+		E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41048142A8E2A040093F5BA /* SocketIOManager.swift */; };
 		E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */; };
 		E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996C2A8C8A9800909E38 /* ContentView.swift */; };
 		E4AD996F2A8C8A9F00909E38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */; };
@@ -14,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E41048142A8E2A040093F5BA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		E4AD99672A8C8A9800909E38 /* ColorRace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorRace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRaceApp.swift; sourceTree = "<group>"; };
 		E4AD996C2A8C8A9800909E38 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -26,12 +29,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E41048132A8E286F0093F5BA /* SocketIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E41048162A8E2A330093F5BA /* SocketIO */ = {
+			isa = PBXGroup;
+			children = (
+				E41048142A8E2A040093F5BA /* SocketIOManager.swift */,
+			);
+			path = SocketIO;
+			sourceTree = "<group>";
+		};
 		E4AD995E2A8C8A9800909E38 = {
 			isa = PBXGroup;
 			children = (
@@ -51,6 +63,7 @@
 		E4AD99692A8C8A9800909E38 /* ColorRace */ = {
 			isa = PBXGroup;
 			children = (
+				E41048162A8E2A330093F5BA /* SocketIO */,
 				E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */,
 				E4AD996C2A8C8A9800909E38 /* ContentView.swift */,
 				E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */,
@@ -83,6 +96,9 @@
 			dependencies = (
 			);
 			name = ColorRace;
+			packageProductDependencies = (
+				E41048122A8E286F0093F5BA /* SocketIO */,
+			);
 			productName = ColorRace;
 			productReference = E4AD99672A8C8A9800909E38 /* ColorRace.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +127,9 @@
 				Base,
 			);
 			mainGroup = E4AD995E2A8C8A9800909E38;
+			packageReferences = (
+				E41048112A8E286F0093F5BA /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
+			);
 			productRefGroup = E4AD99682A8C8A9800909E38 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
+				E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */,
 				E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,6 +357,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E41048112A8E286F0093F5BA /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E41048122A8E286F0093F5BA /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E41048112A8E286F0093F5BA /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			productName = SocketIO;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E4AD995F2A8C8A9800909E38 /* Project object */;
 }
