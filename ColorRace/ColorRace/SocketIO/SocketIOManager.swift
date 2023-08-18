@@ -9,7 +9,6 @@ import Foundation
 import SocketIO
 
 class SocketIOManager {
-
     private var manager: SocketManager?
     private var socket: SocketIOClient?
     private let socketURL = URL(string: "http://localhost:8080")!
@@ -20,6 +19,6 @@ class SocketIOManager {
         } else {
             self.manager = SocketManager(socketURL: socketURL, config: [.log(true), .compress])
         }
-        let socket = manager?.defaultSocket
+        self.socket = self.manager?.defaultSocket
     }
 }
