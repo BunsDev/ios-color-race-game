@@ -8,6 +8,15 @@
     <p>Hello</p>
     <script>
         var socket = io();
+        socket.on('broadcastActiveUsers', function(data) {
+            document.body.innerHTML = ''
+            document.write(data.message)
+        })
+
+        socket.on('newUser', function(data) {
+            document.body.innerHTML = ''
+            document.write(data.message)
+        })
     </script>
 </body>
 </html>
