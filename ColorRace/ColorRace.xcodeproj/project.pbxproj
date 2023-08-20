@@ -13,6 +13,7 @@
 		E44729842A9103FB00883867 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729832A9103FB00883867 /* CardView.swift */; };
 		E44729862A91049800883867 /* CardContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729852A91049800883867 /* CardContainerView.swift */; };
 		E44729882A910AD800883867 /* TileContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729872A910AD800883867 /* TileContainerView.swift */; };
+		E466B6992A91C0B70023FFC4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = E466B6982A91C0B70023FFC4 /* Card.swift */; };
 		E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */; };
 		E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996C2A8C8A9800909E38 /* ContentView.swift */; };
 		E4AD996F2A8C8A9F00909E38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		E44729832A9103FB00883867 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E44729852A91049800883867 /* CardContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerView.swift; sourceTree = "<group>"; };
 		E44729872A910AD800883867 /* TileContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileContainerView.swift; sourceTree = "<group>"; };
+		E466B6982A91C0B70023FFC4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		E4AD99672A8C8A9800909E38 /* ColorRace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorRace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRaceApp.swift; sourceTree = "<group>"; };
 		E4AD996C2A8C8A9800909E38 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		E466B6972A91C0A80023FFC4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E466B6982A91C0B70023FFC4 /* Card.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		E4AD995E2A8C8A9800909E38 = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +94,7 @@
 			children = (
 				E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */,
 				E4AD996C2A8C8A9800909E38 /* ContentView.swift */,
+				E466B6972A91C0A80023FFC4 /* Models */,
 				E44729802A9103BD00883867 /* Views */,
 				E41048162A8E2A330093F5BA /* SocketIO */,
 				E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */,
@@ -183,6 +194,7 @@
 				E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */,
 				E44729842A9103FB00883867 /* CardView.swift in Sources */,
 				E44729882A910AD800883867 /* TileContainerView.swift in Sources */,
+				E466B6992A91C0B70023FFC4 /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
