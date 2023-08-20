@@ -13,8 +13,8 @@ struct CardContainerView: View {
     var body: some View {
         ZStack {
             ForEach(0..<5) { index in
-                CardView(color: Color.white)
-                    .frame(width: CardSize.regularCard.w, height: CardSize.regularCard.h)
+                CardView(color: Card.standard.faceColor)
+                    .frame(width: Card.standard.width, height: Card.standard.height)
                     .offset(x: isSpreadOut ? CGFloat(index - 2) * 10 : 0)
                     .rotationEffect(.degrees(isSpreadOut ? Double(index - 2) * 10 : 0), anchor: .bottom)
             }

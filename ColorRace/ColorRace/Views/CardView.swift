@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: Update Card view to take card and apply appropriate sizing
 struct CardView: View {
     let color: Color
     @State private var isFront = true
@@ -31,43 +32,37 @@ struct CardView: View {
     
     private func faceView(rank: String, symbol: String) -> some View {
         return VStack {
+            rankView(rank: rank, symbol: symbol)
+            ColorGridView()
+                .padding()
+            rankView(rank: rank, symbol: symbol, rotated: true)
+        }
+    }
+    
+    private func rankView(rank: String, symbol: String,  rotated: Bool = false) -> some View {
+        return VStack {
             VStack(alignment: .leading) {
                 HStack {
+                    if rotated {
+                        Spacer()
+                    }
                     Text(" \(rank)")
                         .font(.system(size: 20))
-                    Spacer()
+                        .rotationEffect(.degrees(rotated ? 180 : 0))
+                    if !rotated {
+                        Spacer()
+                    }
                 }
                 HStack {
+                    if rotated {
+                        Spacer()
+                    }
                     Text(symbol)
                         .font(.system(size: 20))
-                    Spacer()
-                }
-            }
-            
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    ColorGridView()
-                    Spacer()
-                }
-                Spacer()
-            }
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                    Text(symbol)
-                        .font(.system(size: 20))
-                        .rotationEffect(.degrees(180))
-                    
-                }
-                HStack {
-                    Spacer()
-                    Text(" \(rank) ")
-                        .font(.system(size: 20))
-                        .rotationEffect(.degrees(180))
-                    
+                        .rotationEffect(.degrees(rotated ? 180 : 0))
+                    if !rotated {
+                        Spacer()
+                    }
                 }
             }
         }
@@ -127,6 +122,6 @@ struct ColorGridView: View {
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         CardView(color: .white)
-            .frame(width: CardSize.regularCard.w, height: CardSize.regularCard.h)
+            .frame(width: Card.standard.width, height: Card.standard.height)
     }
 }
