@@ -11,6 +11,7 @@ struct StartView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Spacer()
                 Text("Color Race")
                     .font(.largeTitle)
                     .padding()
@@ -18,10 +19,12 @@ struct StartView: View {
                 HStack(spacing: 20) {
                     NavigationLink(destination: SinglePlayerView()) {
                         Text("1 Player")
-                    }.buttonStyle(.bordered)
-                    NavigationLink(destination: MultiPlayerView()) {
+                    }.buttonStyle(.borderedProminent)
+                        .tint(.red)
+                    NavigationLink(destination: GameLobbyView()) {
                         Text("2 Player")
-                    }.buttonStyle(.bordered)
+                    }.buttonStyle(.borderedProminent)
+                        .tint(.red)
                 }
                 .padding(.top, 20)
                 

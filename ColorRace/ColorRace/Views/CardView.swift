@@ -119,6 +119,5 @@ struct ColorGridView: View {
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         CardView(card: CardStore.standard)
-//            .frame(width: CardStore.standard.width, height: CardStore.standard.height)
     }
 }
