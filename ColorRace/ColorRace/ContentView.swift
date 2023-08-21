@@ -10,14 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack(spacing: 10) {
-            TileContainerView()
-//            ForEach(0..<3) { _ in
-//                HStack(spacing: 10) {
-//                    ForEach(0..<3) { _ in
-//                        TileView()
-//                    }
-//                }
-//            }
+            CardLoadingView(card: CardStore.standard)
         }
         .padding()
     }

@@ -11,7 +11,7 @@
 		E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41048142A8E2A040093F5BA /* SocketIOManager.swift */; };
 		E44729822A9103CF00883867 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729812A9103CF00883867 /* TileView.swift */; };
 		E44729842A9103FB00883867 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729832A9103FB00883867 /* CardView.swift */; };
-		E44729862A91049800883867 /* CardContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729852A91049800883867 /* CardContainerView.swift */; };
+		E44729862A91049800883867 /* CardLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729852A91049800883867 /* CardLoadingView.swift */; };
 		E44729882A910AD800883867 /* TileContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729872A910AD800883867 /* TileContainerView.swift */; };
 		E466B6992A91C0B70023FFC4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = E466B6982A91C0B70023FFC4 /* Card.swift */; };
 		E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */; };
@@ -26,7 +26,7 @@
 		E41048142A8E2A040093F5BA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		E44729812A9103CF00883867 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E44729832A9103FB00883867 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		E44729852A91049800883867 /* CardContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainerView.swift; sourceTree = "<group>"; };
+		E44729852A91049800883867 /* CardLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLoadingView.swift; sourceTree = "<group>"; };
 		E44729872A910AD800883867 /* TileContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileContainerView.swift; sourceTree = "<group>"; };
 		E466B6982A91C0B70023FFC4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		E4AD99672A8C8A9800909E38 /* ColorRace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorRace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,7 +64,7 @@
 				E44729812A9103CF00883867 /* TileView.swift */,
 				E44729872A910AD800883867 /* TileContainerView.swift */,
 				E44729832A9103FB00883867 /* CardView.swift */,
-				E44729852A91049800883867 /* CardContainerView.swift */,
+				E44729852A91049800883867 /* CardLoadingView.swift */,
 				E4FE5F942A91DFD100A860DC /* StartView.swift */,
 				E4FE5F962A91E01700A860DC /* CustomButton.swift */,
 			);
@@ -194,7 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4FE5F952A91DFD100A860DC /* StartView.swift in Sources */,
-				E44729862A91049800883867 /* CardContainerView.swift in Sources */,
+				E44729862A91049800883867 /* CardLoadingView.swift in Sources */,
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
 				E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */,
 				E4FE5F972A91E01700A860DC /* CustomButton.swift in Sources */,

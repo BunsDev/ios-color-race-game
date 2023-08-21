@@ -7,22 +7,19 @@
 
 import SwiftUI
 
-// TODO: Update Card view to take card and apply appropriate sizing
 struct CardView: View {
-    let color: Color
-    @State private var isFront = true
-    private let randomCardRank = Card.cardRanks.randomElement()!
-    private let randomCardSymbol = Card.cardSymbols.randomElement()!
-    
+    @State var card: Card
+
     var body: some View {
         VStack {
-            if isFront {
-                faceView(rank: randomCardRank, symbol: randomCardSymbol)
+            if card.isFaceUp {
+                faceView()
             } else {
                 backView()
             }
         }
-        .background(color)
+        .frame(width: card.width, height: card.height)
+        .background(card.isFaceUp ? card.faceColor : card.backColor)
         .cornerRadius(15)
         .overlay(
             RoundedRectangle(cornerRadius: 15)
@@ -30,12 +27,12 @@ struct CardView: View {
         )
     }
     
-    private func faceView(rank: String, symbol: String) -> some View {
+    private func faceView() -> some View {
         return VStack {
-            rankView(rank: rank, symbol: symbol)
+            rankView(rank: card.rank, symbol: card.symbol)
             ColorGridView()
                 .padding()
-            rankView(rank: rank, symbol: symbol, rotated: true)
+            rankView(rank: card.rank, symbol: card.symbol, rotated: true)
         }
     }
     
@@ -46,8 +43,8 @@ struct CardView: View {
                     if rotated {
                         Spacer()
                     }
-                    Text(" \(rank)")
-                        .font(.system(size: 20))
+                    Text(" " + rank)
+                        .font(.system(size: card.faceFontSize))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                     if !rotated {
                         Spacer()
@@ -58,7 +55,7 @@ struct CardView: View {
                         Spacer()
                     }
                     Text(symbol)
-                        .font(.system(size: 20))
+                        .font(.system(size: card.faceFontSize))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                     if !rotated {
                         Spacer()
@@ -73,7 +70,7 @@ struct CardView: View {
             GridCardSymbols()
             
             Text("Color Race")
-                .font(.system(size: 36, weight: .bold))
+                .font(.system(size: card.backFontSize, weight: .bold))
                 .foregroundColor(.white)
                 .background(Color.clear)
                 .padding()
@@ -82,7 +79,7 @@ struct CardView: View {
 }
 
 struct GridCardSymbols: View {
-    private let cardSymbols = Card.cardSymbols
+    private let cardSymbols = CardDetail.symbols
     
     var body: some View {
         VStack(spacing: 0) {
@@ -90,7 +87,7 @@ struct GridCardSymbols: View {
                 HStack(spacing: 0) {
                     ForEach(cardSymbols, id: \.self) { symbol in
                         Text(symbol)
-                            .font(.system(size: 8))
+                            .font(.system(size: 5))
                             .padding()
                     }
                 }
@@ -121,7 +118,7 @@ struct ColorGridView: View {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(color: .white)
-            .frame(width: Card.standard.width, height: Card.standard.height)
+        CardView(card: CardStore.standard)
+//            .frame(width: CardStore.standard.width, height: CardStore.standard.height)
     }
 }
