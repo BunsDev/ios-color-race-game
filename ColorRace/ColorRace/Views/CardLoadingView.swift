@@ -27,11 +27,11 @@ struct CardLoadingView: View {
         }
         .onAppear() {
             cards = [
-                CardStore.standard,
-                CardStore.standard,
-                CardStore.standard,
-                CardStore.standard,
-                CardStore.standard
+                CardStore.medium,
+                CardStore.medium,
+                CardStore.medium,
+                CardStore.medium,
+                CardStore.medium
             ]
             animateForever()
         }
@@ -62,6 +62,6 @@ struct CardLoadingView: View {
 
 struct CardContainerView_Previews: PreviewProvider {
     static var previews: some View {
-        CardLoadingView(card: CardStore.standard)
+        CardLoadingView(card: CardStore.medium)
     }
 }

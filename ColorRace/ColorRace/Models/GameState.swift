@@ -11,6 +11,7 @@ internal enum GameState {
     case disconnected
     case connectingToServer
     case waitingForOpponent
+    case inGame
     case failure
 }
 

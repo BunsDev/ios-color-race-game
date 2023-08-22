@@ -13,7 +13,7 @@ class SocketIOManager: ObservableObject {
     private var manager: SocketManager
     private var socket: SocketIOClient!
     private let socketURL = URL(string: "http://localhost:3000")!
-    @Published var gameState = GameState.disconnected
+    @Published var gameState = GameState.inGame
     
     private init() {
         manager = SocketManager(socketURL: socketURL, config: [.log(true), .compress])

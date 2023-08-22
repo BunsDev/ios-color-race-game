@@ -11,7 +11,17 @@ struct MultiPlayerView: View {
     @ObservedObject private var socketManager = SocketIOManager.shared
     
     var body: some View {
+        
         VStack {
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
+            Text("An error occurred while connecting..")
             switch socketManager.gameState {
             case .disconnected:
                 Spacer()
@@ -53,8 +63,26 @@ struct MultiPlayerView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
                 Spacer()
+            case .inGame:
+                VStack {
+                    HStack(alignment: .center) {
+                        CardView(card: CardStore.small)
+                        Spacer()
+                        Button("x") {
+                            print("Quit Game?")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.red)
+                    }
+                    .border(.red, width: 1)
+//                    Spacer()
+                    VStack {
+                        CardView(card: CardStore.standard)
+                            .border(.green, width: 1)
+                    }
+                }.border(.blue, width: 1)
             }
-        }
+        }.border(.cyan, width: 1)
     }
 }
 

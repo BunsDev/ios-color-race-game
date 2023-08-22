@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CardBackView: View {
     @State var card: Card
-    let cornerRadius: CGFloat = 15.0
-    let borderWidth: CGFloat = 2.0
-    let outerBorderColor: Color = .black
-    let innerBorderColor: Color = .white
+    private let cornerRadius: CGFloat = 15.0
+    private let borderWidth: CGFloat = 2.0
+    private let outerBorderColor: Color = .black
+    private let innerBorderColor: Color = .white
     
     var body: some View {
         GeometryReader { geometry in
@@ -34,8 +34,7 @@ struct CardBackView: View {
                             .padding()
                         
                     )
-                
-            }
+            }.frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
     
