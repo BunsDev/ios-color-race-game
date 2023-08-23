@@ -1,45 +1,78 @@
-const express = require('express')
-const app = express()
-const http = require('http').Server(app)
-const io = require('socket.io')(http)
-const port = 3000
-var users = 0
 
-// app.listen(port, function() {
-//     console.log(`App running on http://localhost:${port}`)
-// })
+const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
 
-app.get("/", function(request, response) {
-    console.log(`Server listening on port ${port}`)
-    response.sendFile(__dirname + "/index.html")
-})
+const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
 
-http.listen(port, function() {
-    console.log(`App running on http://localhost:${port}`)
-})
+const PORT = 3000;
 
-io.on('connection', function(socket) {
-    console.log('someone connected!');
-
-    users++
-    // emit message to all connected users
-    // io.sockets.emit('broadcastActiveUsers', { message: users + " connected"})
-
-    // emit message to new connections
-    socket.emit('newUser', { message: "Welcome!"})
-
-    // emit message to existing connections
-    socket.broadcast.emit('newUser', { message: users + " connected"})
-
-    socket.on('disconnect', function() {
-        console.log('someone disconnected!');
-
-        users--
-
-        // emit message to all connected users
-        // io.sockets.emit('broadcastActiveUsers', { message: users + " connected"})
-
-        // emit message to existing connections
-        socket.broadcast.emit('newUser', { message: users + " connected"})
-    });
+server.listen(PORT, () => {
+  console.log(`1. Server is running on port ${PORT}`);
 });
+
+const MAX_USERS_PER_NAMESPACE = 2;
+const namespaces = [];
+
+io.on('connection', (socket) => {
+
+  console.log(`2 => A User connected`);
+
+  for (const ns of namespaces) {
+    console.log(`3 => Current namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+
+
+  let namespace;
+  for (const ns of namespaces) {
+    if (ns.users.length < MAX_USERS_PER_NAMESPACE) {
+      namespace = ns;
+      console.log(`4 => Available namespace found: ${namespace}`);
+      break;
+    }
+  }
+
+  if (!namespace) {
+    console.log(`5 => No available namespace found !`);
+    namespace = createNamespace();
+    console.log(`6 => New namespace created: ${namespace.name}`);
+  }
+
+  console.log(`7 => Proceeding with namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+  namespace.users.push(socket.id);
+
+  console.log(`8 => Pushed user onto namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+
+  console.log(`9 => Joining user to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  socket.join(namespace.name);
+
+  socket.emit('userConnected', namespace.name);
+  console.log(`10 => Emitting 'userConnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+  socket.emit('namespaceAssigned', namespace.name);
+  console.log(`11 => Emitting 'namespaceAssigned' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+});
+
+function createNamespace() {
+  const name = `namespace_${namespaces.length + 1}`;
+  const users = [];
+  namespaces.push({ name, users });
+
+  io.of(`/${name}`).on('connection', (socket) => {
+    console.log(`12 => User connected to ${name}: ${socket.id}`);
+
+    socket.on('disconnect', () => {
+      const index = namespace.users.indexOf(socket.id);
+      if (index !== -1) {
+        namespace.users.splice(index, 1);
+      }
+      console.log(`13 => User disconnected from ${name}: ${socket.id}`);
+    });
+  });
+
+  return { name, users };
+}
