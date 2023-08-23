@@ -55,6 +55,15 @@ io.on('connection', (socket) => {
 
   socket.emit('namespaceAssigned', namespace.name);
   console.log(`11 => Emitting 'namespaceAssigned' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+  if(namespace.users.length == MAX_USERS_PER_NAMESPACE) {
+    console.log(`12 => Enough members for game in namespace: ${namespace.name}, count: ${namespace.users.length}`);
+    // TODO: check for way to emit to current socket without explicitly doing so.
+    socket.emit('foundOpponent')
+    socket.broadcast.emit('foundOpponent')
+    console.log(`13 => Emitting 'foundOpponent' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  }
+
 });
 
 function createNamespace() {
@@ -63,14 +72,15 @@ function createNamespace() {
   namespaces.push({ name, users });
 
   io.of(`/${name}`).on('connection', (socket) => {
-    console.log(`12 => User connected to ${name}: ${socket.id}`);
+    console.log(`14 => User connected to ${name}: ${socket.id}`);
 
+    // TODO: Fix count updation on socket disconnection from a namespace
     socket.on('disconnect', () => {
       const index = namespace.users.indexOf(socket.id);
       if (index !== -1) {
         namespace.users.splice(index, 1);
       }
-      console.log(`13 => User disconnected from ${name}: ${socket.id}`);
+      console.log(`15 => User disconnected from ${name}: ${socket.id}`);
     });
   });
 
