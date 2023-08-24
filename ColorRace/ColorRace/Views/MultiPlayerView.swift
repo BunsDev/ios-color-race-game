@@ -13,15 +13,6 @@ struct MultiPlayerView: View {
     var body: some View {
         
         VStack {
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
-            Text("An error occurred while connecting..")
             switch socketManager.gameState {
             case .disconnected:
                 Spacer()
@@ -82,7 +73,11 @@ struct MultiPlayerView: View {
                     }
                 }.border(.blue, width: 1)
             }
-        }.border(.cyan, width: 1)
+        }
+        .border(.cyan, width: 1)
+        .onDisappear {
+            socketManager.closeConnection()
+        }
     }
 }
 
