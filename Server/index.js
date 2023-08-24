@@ -2,26 +2,23 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-
 const PORT = 3000;
-
-server.listen(PORT, () => {
-  console.log(`1. Server is running on port ${PORT}`);
-});
-
 const MAX_USERS_PER_NAMESPACE = 2;
 const namespaces = [];
 
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 io.on('connection', (socket) => {
 
-  console.log(`2 => A User connected`);
+  console.log(`=> A User connected`);
 
   for (const ns of namespaces) {
-    console.log(`3 => Current namespace ${ns.name}: , count: ${ns.users.length}`);
+    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
   }
 
 
@@ -29,41 +26,83 @@ io.on('connection', (socket) => {
   for (const ns of namespaces) {
     if (ns.users.length < MAX_USERS_PER_NAMESPACE) {
       namespace = ns;
-      console.log(`4 => Available namespace found: ${namespace}`);
+      console.log(`=> Available namespace found: ${namespace}`);
       break;
     }
   }
 
   if (!namespace) {
-    console.log(`5 => No available namespace found !`);
+    console.log(`=> No available namespace found !`);
     namespace = createNamespace();
-    console.log(`6 => New namespace created: ${namespace.name}`);
+    console.log(`=> New namespace created: ${namespace.name}`);
   }
 
-  console.log(`7 => Proceeding with namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  console.log(`=> Proceeding with namespace: ${namespace.name}, count: ${namespace.users.length}`);
 
   namespace.users.push(socket.id);
 
-  console.log(`8 => Pushed user onto namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  console.log(`=> Pushed user onto namespace: ${namespace.name}, count: ${namespace.users.length}`);
 
 
-  console.log(`9 => Joining user to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  console.log(`=> Joining user to namespace: ${namespace.name}, count: ${namespace.users.length}`);
   socket.join(namespace.name);
 
   socket.emit('userConnected', namespace.name);
-  console.log(`10 => Emitting 'userConnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  console.log(`=> Emitting 'userConnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
 
   socket.emit('namespaceAssigned', namespace.name);
-  console.log(`11 => Emitting 'namespaceAssigned' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  console.log(`=> Emitting 'namespaceAssigned' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+  socket.on('disconnectNamespace', (namespaceName) => {
+
+    console.log(`=> Disconnecting from namespace ${namespaceName}`);
+
+        const targetNamespace = namespaces.find((namespace) => namespace.name === namespaceName);
+
+        if (targetNamespace) {
+
+          console.log(`=> Found namespace to disconnect from: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
+
+            const index = targetNamespace.users.indexOf(socket.id);
+            console.log(`=> Searching disconnecting user to disconnect from namespace: ${targetNamespace.name}`);
+
+            if (index !== -1) {
+              
+              // notify other users on namespace of user disconnection
+              const message = `${socket.id} has disconnected.`;
+              socket.to(namespaceName).emit('userDisconnected', message);
+              console.log(`=> Emitting 'userDisconnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+
+              console.log(`=> Found disconnecting user in namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
+
+                targetNamespace.users.splice(index, 1);
+                console.log(`=> Disconnected user from namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
+                
+                if (targetNamespace.users.length === 0) {
+                  console.log(`=> No more users connected to namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
+                    const indexToRemove = namespaces.indexOf(targetNamespace);
+                    console.log(`=> Searching namespace to clear from namespaces: ${targetNamespace.name}, namespaces count: ${namespaces.length}`);
+
+                    if (indexToRemove !== -1) {
+                        namespaces.splice(indexToRemove, 1);
+                        console.log(`=> Namespace ${namespaceName} removed due to no users.`);
+                        console.log(`=> Updated name space count count: ${namespaces.length}`);
+                    }
+                }
+            }
+        }
+    });
+
+// TODO: If at any point, there are exactly 1 user on multiple namespaces, match them with each other and clear empty namespaces
 
   if(namespace.users.length == MAX_USERS_PER_NAMESPACE) {
-    console.log(`12 => Enough members for game in namespace: ${namespace.name}, count: ${namespace.users.length}`);
-    // TODO: check for way to emit to current socket without explicitly doing so.
+    console.log(`=> Enough members for game in namespace: ${namespace.name}, count: ${namespace.users.length}`);
+    // notify current socket
     socket.emit('foundOpponent')
-    socket.broadcast.emit('foundOpponent')
-    console.log(`13 => Emitting 'foundOpponent' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+    // notify other sockets on same namespace
+    socket.to(namespace.name).emit('foundOpponent');
+    console.log(`=> Emitting 'foundOpponent' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
   }
-
 });
 
 function createNamespace() {
@@ -71,18 +110,9 @@ function createNamespace() {
   const users = [];
   namespaces.push({ name, users });
 
-  io.of(`/${name}`).on('connection', (socket) => {
-    console.log(`14 => User connected to ${name}: ${socket.id}`);
-
-    // TODO: Fix count updation on socket disconnection from a namespace
-    socket.on('disconnect', () => {
-      const index = namespace.users.indexOf(socket.id);
-      if (index !== -1) {
-        namespace.users.splice(index, 1);
-      }
-      console.log(`15 => User disconnected from ${name}: ${socket.id}`);
-    });
-  });
+  // io.of(`/${name}`).on('connection', (socket) => {
+  //   console.log(`=> User connected to ${name}: ${socket.id}`);
+  // });
 
   return { name, users };
 }
