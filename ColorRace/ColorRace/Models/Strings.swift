@@ -13,3 +13,4 @@ internal struct Strings {
     static let multiPlayer = "2 Player"
     static let comingSoon = "Coming soon..."
 }
+

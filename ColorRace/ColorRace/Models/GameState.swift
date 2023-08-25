@@ -20,3 +20,10 @@ internal struct GameFontConfig {
     static let subtitleFontSize: CGFloat = 20
     static let buttonFontSize: CGFloat = 20
 }
+
+internal struct SocketEvents {
+    static let userConnected = "userConnected"
+    static let userJoined = "userJoined"
+    static let gameStarted = "gameStarted"
+    static let userDisconnected = "userDisconnected"
+}
