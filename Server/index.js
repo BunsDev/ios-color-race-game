@@ -1,4 +1,3 @@
-
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
@@ -13,106 +12,168 @@ server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-io.on('connection', (socket) => {
-
-  console.log(`=> A User connected`);
-
-  for (const ns of namespaces) {
-    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
-  }
-
-
+// Function to find or create a namespace and connect the user
+function findOrCreateNamespace(socket) {
   let namespace;
+
+  // Check for available namespaces or create a new one
   for (const ns of namespaces) {
     if (ns.users.length < MAX_USERS_PER_NAMESPACE) {
       namespace = ns;
-      console.log(`=> Available namespace found: ${namespace}`);
       break;
     }
   }
 
   if (!namespace) {
-    console.log(`=> No available namespace found !`);
     namespace = createNamespace();
-    console.log(`=> New namespace created: ${namespace.name}`);
   }
 
-  console.log(`=> Proceeding with namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  // Connect the user to the selected namespace
+  connectToNamespace(socket, namespace);
+}
 
+// Function to connect a user to a namespace
+function connectToNamespace(socket, namespace) {
   namespace.users.push(socket.id);
-
-  console.log(`=> Pushed user onto namespace: ${namespace.name}, count: ${namespace.users.length}`);
-
-
-  console.log(`=> Joining user to namespace: ${namespace.name}, count: ${namespace.users.length}`);
   socket.join(namespace.name);
-
   socket.emit('userConnected', namespace.name);
-  console.log(`=> Emitting 'userConnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
 
-  socket.emit('namespaceAssigned', namespace.name);
-  console.log(`=> Emitting 'namespaceAssigned' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  // Notify all users on the namespace about the new user
+  socket.to(namespace.name).emit('userJoined', socket.id);
 
-  socket.on('disconnectNamespace', (namespaceName) => {
-
-    console.log(`=> Disconnecting from namespace ${namespaceName}`);
-
-        const targetNamespace = namespaces.find((namespace) => namespace.name === namespaceName);
-
-        if (targetNamespace) {
-
-          console.log(`=> Found namespace to disconnect from: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
-
-            const index = targetNamespace.users.indexOf(socket.id);
-            console.log(`=> Searching disconnecting user to disconnect from namespace: ${targetNamespace.name}`);
-
-            if (index !== -1) {
-              
-              // notify other users on namespace of user disconnection
-              const message = `${socket.id} has disconnected.`;
-              socket.to(namespaceName).emit('userDisconnected', message);
-              console.log(`=> Emitting 'userDisconnected' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
-
-              console.log(`=> Found disconnecting user in namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
-
-                targetNamespace.users.splice(index, 1);
-                console.log(`=> Disconnected user from namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
-                
-                if (targetNamespace.users.length === 0) {
-                  console.log(`=> No more users connected to namespace: ${targetNamespace.name}, count: ${targetNamespace.users.length}`);
-                    const indexToRemove = namespaces.indexOf(targetNamespace);
-                    console.log(`=> Searching namespace to clear from namespaces: ${targetNamespace.name}, namespaces count: ${namespaces.length}`);
-
-                    if (indexToRemove !== -1) {
-                        namespaces.splice(indexToRemove, 1);
-                        console.log(`=> Namespace ${namespaceName} removed due to no users.`);
-                        console.log(`=> Updated name space count count: ${namespaces.length}`);
-                    }
-                }
-            }
-        }
-    });
-
-// TODO: If at any point, there are exactly 1 user on multiple namespaces, match them with each other and clear empty namespaces
-
-  if(namespace.users.length == MAX_USERS_PER_NAMESPACE) {
-    console.log(`=> Enough members for game in namespace: ${namespace.name}, count: ${namespace.users.length}`);
-    // notify current socket
-    socket.emit('foundOpponent')
-    // notify other sockets on same namespace
-    socket.to(namespace.name).emit('foundOpponent');
-    console.log(`=> Emitting 'foundOpponent' to namespace: ${namespace.name}, count: ${namespace.users.length}`);
+  // Check if there are enough users for a game
+  if (namespace.users.length === MAX_USERS_PER_NAMESPACE) {
+    startGame(namespace);
   }
+}
+
+// Function to start a game when enough users are present in a namespace
+function startGame(namespace) {
+  // Notify all users on the namespace that a game has started
+  io.in(namespace.name).emit('gameStarted', namespace.name);
+}
+
+// Function to handle user disconnect
+function handleDisconnect(socket) {
+  // Display the current state of all namespaces
+  console.log('\n');
+  for (const ns of namespaces) {
+    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+  console.log('\n');
+
+  const namespaceName = findNamespaceByUser(socket.id);
+
+  if (namespaceName) {
+    // Notify other users on the namespace about the disconnect
+    socket.to(namespaceName).emit('userDisconnected', socket.id);
+    // io.to(namespaceName).emit('userDisconnected', socket.id);
+
+    console.log(`=> A User disconnected`);
+
+    // Remove the user from the namespace
+    const namespace = namespaces.find(ns => ns.name === namespaceName);
+    const index = namespace.users.indexOf(socket.id);
+
+    if (index !== -1) {
+      namespace.users.splice(index, 1);
+    }
+
+    // If there are no users left in the namespace, remove it
+    if (namespace.users.length === 0) {
+      const namespaceIndex = namespaces.indexOf(namespace);
+      namespaces.splice(namespaceIndex, 1);
+    }
+
+    // Check if there are any namespaces with only one user
+    checkForSingleUserNamespaces();
+  }
+}
+
+// Function to find a namespace by user
+function findNamespaceByUser(userId) {
+  for (const ns of namespaces) {
+    if (ns.users.includes(userId)) {
+      return ns.name;
+    }
+  }
+  return null;
+}
+
+// Function to check for namespaces with only one user and merge them
+function checkForSingleUserNamespaces() {
+  const singleUserNamespaces = namespaces.filter(ns => ns.users.length === 1);
+
+  while (singleUserNamespaces.length >= 2) {
+    const namespace1 = singleUserNamespaces.pop();
+    const namespace2 = singleUserNamespaces.pop();
+    console.log(`=> Processing namespace ${namespace1.name}: , count: ${namespace1.users.length}`);
+    console.log(`=> Processing namespace ${namespace2.name}: , count: ${namespace2.users.length}`);
+
+    // Merge the two namespaces
+    const mergedNamespace = createNamespace();
+    for (const socketId of namespace1.users) {
+      console.log(`=> Processing ${socketId}`)
+      console.log(`=> Connected number of sockets: # ${io.of(namespace1.name).sockets.size}`);
+      const socket = io.of(namespace1.name).sockets.get[socketId];
+      if (socket) {
+        console.log(`=> Preconnect1 namespace ${mergedNamespace.name}: , count: ${mergedNamespace.users.length}`);
+        connectToNamespace(socket, mergedNamespace);
+      } else {
+        console.log(`=> Socket1 not found to merge`);
+      }
+    }
+    for (const socketId of namespace2.users) {
+      const socket = io.sockets.sockets[socketId];
+      if (socket) {
+        console.log(`=> Preconnect2 namespace ${mergedNamespace.name}: , count: ${mergedNamespace.users.length}`);
+        connectToNamespace(socket, mergedNamespace);
+      } else {
+        console.log(`=> Socket1 not found to merge`);
+      }
+    }
+  }
+}
+
+
+// Event handler for user connections
+io.on('connection', (socket) => {
+  console.log(`=> A User connected`);
+
+  // Display the current state of all namespaces
+  console.log('\n');
+  for (const ns of namespaces) {
+    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+  console.log('\n');
+
+  // Find or create a namespace and connect the user
+  findOrCreateNamespace(socket);
+
+  // Display the current state of all namespaces
+  for (const ns of namespaces) {
+    console.log(`=> Updated namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+
+  // Handle user disconnect
+  socket.on('disconnect', () => {
+    handleDisconnect(socket);
+  });
 });
 
+// Function to create a new namespace
 function createNamespace() {
   const name = `namespace_${namespaces.length + 1}`;
   const users = [];
   namespaces.push({ name, users });
+  console.log(`=> New namespace created: ${name}`);
 
-  // io.of(`/${name}`).on('connection', (socket) => {
-  //   console.log(`=> User connected to ${name}: ${socket.id}`);
-  // });
+  // Display the current state of all namespaces
+  console.log('\n');
+  for (const ns of namespaces) {
+    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+  console.log('\n');
 
   return { name, users };
 }
