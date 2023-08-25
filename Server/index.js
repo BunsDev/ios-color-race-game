@@ -67,7 +67,6 @@ function handleDisconnect(socket) {
   if (namespaceName) {
     // Notify other users on the namespace about the disconnect
     socket.to(namespaceName).emit('userDisconnected', socket.id);
-    // io.to(namespaceName).emit('userDisconnected', socket.id);
 
     console.log(`=> A User disconnected`);
 
@@ -102,7 +101,15 @@ function findNamespaceByUser(userId) {
 
 // Function to check for namespaces with only one user and merge them
 function checkForSingleUserNamespaces() {
+  console.log(`=> Connected number of sockets: # ${io.of("/").sockets.size}`);
+
+  for (const [_, socket] of io.of("/").sockets) {
+    console.log(`=> found socket with id ${socket.id} on namespace:${findNamespaceByUser(socket.id)}`);
+  }
+
   const singleUserNamespaces = namespaces.filter(ns => ns.users.length === 1);
+
+  const namespacesToRemove = []; // Store namespaces to remove
 
   while (singleUserNamespaces.length >= 2) {
     const namespace1 = singleUserNamespaces.pop();
@@ -112,29 +119,48 @@ function checkForSingleUserNamespaces() {
 
     // Merge the two namespaces
     const mergedNamespace = createNamespace();
+
+    // for (const [_, socket] of io.of("/").sockets) {
+    //   const nameSpace = findNamespaceByUser(socket.id)
+    //   if(nameSpace === namespace1.name || nameSpace === namespace2.name) {
+    //     console.log(`=> Found socket ${socket.id} to merge`);
+    //     connectToNamespace(socket, mergedNamespace);
+    //   } else {
+    //     console.log(`=> No socket found to merge`);
+    //   }
+    // }
+
     for (const socketId of namespace1.users) {
-      console.log(`=> Processing ${socketId}`)
-      console.log(`=> Connected number of sockets: # ${io.of(namespace1.name).sockets.size}`);
-      const socket = io.of(namespace1.name).sockets.get[socketId];
+      const socket = io.of("/").sockets.get(socketId);
       if (socket) {
-        console.log(`=> Preconnect1 namespace ${mergedNamespace.name}: , count: ${mergedNamespace.users.length}`);
+        console.log(`=> Merge connect socket: ${socketId} to namespace: ${mergedNamespace.name}, count: ${mergedNamespace.users.length}`);
         connectToNamespace(socket, mergedNamespace);
       } else {
-        console.log(`=> Socket1 not found to merge`);
+        console.log(`=> Socket not found to merge`);
       }
     }
+
     for (const socketId of namespace2.users) {
-      const socket = io.sockets.sockets[socketId];
+      const socket = io.of("/").sockets.get(socketId);
       if (socket) {
-        console.log(`=> Preconnect2 namespace ${mergedNamespace.name}: , count: ${mergedNamespace.users.length}`);
+        console.log(`=> Merge connect socket: ${socketId} to namespace: ${mergedNamespace.name}, count: ${mergedNamespace.users.length}`);
         connectToNamespace(socket, mergedNamespace);
       } else {
-        console.log(`=> Socket1 not found to merge`);
+        console.log(`=> Socket not found to merge`);
       }
+    }
+
+    namespacesToRemove.push(namespace1, namespace2);
+  }
+
+  // Remove the merged namespaces
+  for (const ns of namespacesToRemove) {
+    const index = namespaces.indexOf(ns);
+    if (index !== -1) {
+      namespaces.splice(index, 1);
     }
   }
 }
-
 
 // Event handler for user connections
 io.on('connection', (socket) => {
