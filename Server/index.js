@@ -151,6 +151,10 @@ function checkForSingleUserNamespaces() {
     }
 
     namespacesToRemove.push(namespace1, namespace2);
+
+    for (const ns of namespaces) {
+      console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
+    }
   }
 
   // Remove the merged namespaces
