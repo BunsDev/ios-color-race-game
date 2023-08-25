@@ -44,7 +44,9 @@ class SocketIOManager: ObservableObject {
                 self?.gameState = .waitingForOpponent
             } else {
                 print("client => received event: \(SocketEvents.userJoined), socket id(other):\(data)")
-                self?.gameState = .waitingForOpponent
+                if self?.gameState != .inGame {
+                    self?.gameState = .waitingForOpponent
+                }
             }
         }
         
