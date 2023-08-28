@@ -25,6 +25,10 @@
 		E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD996C2A8C8A9800909E38 /* ContentView.swift */; };
 		E4AD996F2A8C8A9F00909E38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */; };
 		E4AD99722A8C8A9F00909E38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4AD99712A8C8A9F00909E38 /* Preview Assets.xcassets */; };
+		E4EB23742A9B1B040014F1C9 /* NewContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB23732A9B1B040014F1C9 /* NewContentView.swift */; };
+		E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB23752A9B20F50014F1C9 /* BoardViewRepresentable.swift */; };
+		E4EB237A2A9B41000014F1C9 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB23792A9B41000014F1C9 /* BoardView.swift */; };
+		E4EB237C2A9B42F10014F1C9 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB237B2A9B42F10014F1C9 /* TileView.swift */; };
 		E4FE5F952A91DFD100A860DC /* GameModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FE5F942A91DFD100A860DC /* GameModeSelectionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +51,10 @@
 		E4AD996C2A8C8A9800909E38 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4AD99712A8C8A9F00909E38 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E4EB23732A9B1B040014F1C9 /* NewContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContentView.swift; sourceTree = "<group>"; };
+		E4EB23752A9B20F50014F1C9 /* BoardViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewRepresentable.swift; sourceTree = "<group>"; };
+		E4EB23792A9B41000014F1C9 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		E4EB237B2A9B42F10014F1C9 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E4FE5F942A91DFD100A860DC /* GameModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +91,10 @@
 				E44729852A91049800883867 /* CardLoadingView.swift */,
 				E4A1C4482A9A274800116F58 /* DropView.swift */,
 				E4A1C44A2A9A299A00116F58 /* FallingTileBehavior.swift */,
+				E4EB23732A9B1B040014F1C9 /* NewContentView.swift */,
+				E4EB23752A9B20F50014F1C9 /* BoardViewRepresentable.swift */,
+				E4EB23792A9B41000014F1C9 /* BoardView.swift */,
+				E4EB237B2A9B42F10014F1C9 /* TileView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -221,11 +233,15 @@
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
 				E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */,
 				E4AD1B602A93886D00ACF69B /* SinglePlayerView.swift in Sources */,
+				E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */,
 				E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */,
 				E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */,
 				E44729842A9103FB00883867 /* CardView.swift in Sources */,
 				E466B6992A91C0B70023FFC4 /* Card.swift in Sources */,
+				E4EB237A2A9B41000014F1C9 /* BoardView.swift in Sources */,
 				E4AD1B642A93934500ACF69B /* CardBackView.swift in Sources */,
+				E4EB23742A9B1B040014F1C9 /* NewContentView.swift in Sources */,
+				E4EB237C2A9B42F10014F1C9 /* TileView.swift in Sources */,
 				E4A1C4492A9A274800116F58 /* DropView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

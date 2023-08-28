@@ -17,10 +17,11 @@ class FallingTileBehavior: UIDynamicBehavior {
     }()
     private let itemBehavior: UIDynamicItemBehavior = {
         let itemBehavior = UIDynamicItemBehavior()
-        itemBehavior.allowsRotation = false
-        itemBehavior.elasticity = 0.80
+        itemBehavior.allowsRotation = true
+        itemBehavior.elasticity = 0.20
         return itemBehavior
     }()
+
     override init() {
         super.init()
         addChildBehavior(gravity)
@@ -32,6 +33,7 @@ class FallingTileBehavior: UIDynamicBehavior {
         gravity.addItem(item)
         collider.addItem(item)
         itemBehavior.addItem(item)
+        itemBehavior.addAngularVelocity(.random(in: -10...10), for: item)
     }
     
     func removeItem(item: UIDynamicItem) {

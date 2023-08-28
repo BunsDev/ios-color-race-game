@@ -2,43 +2,60 @@
 //  TileView.swift
 //  ColorRace
 //
-//  Created by Anup D'Souza on 19/08/23.
+//  Created by Anup D'Souza on 27/08/23.
 //
 
-import SwiftUI
+import UIKit
 
-struct Tile: View {
-    let width: CGFloat
-    let height: CGFloat
-    @State var isAnimating: Bool = false
-    @State var color: Color
-    @State var xOffset: CGFloat = 0
-    @State var rotationAngle: Double = 0
-    
-    var body: some View {
-        Rectangle()
-            .frame(width: width, height: height)
-            .foregroundColor(color)
-            .scaleEffect(isAnimating ? 1.25 : 1.0)
-            .rotation3DEffect(
-                .degrees(isAnimating ? rotationAngle : 0),
-                axis: (x: isAnimating ? xOffset : 0, y: 0, z: 0)
-            )
-            .animation(.easeInOut(duration: 1.0))
-            .onAppear() {
-                if isAnimating {
-                    // Determine the side of the screen (left or right)
-                    xOffset = UIScreen.main.bounds.width / 2 > width * CGFloat(10) ? -1 : 1
-                    // Rotate the tile based on the side
-                    rotationAngle = xOffset > 0 ? -15 : 15
-                }
-            }
+protocol TileViewDelegate: AnyObject {
+    func tileView(_ tileView: TileView, didSelectColor color: UIColor)
+}
+
+class TileView: UIView {
+    weak var delegate: TileViewDelegate?
+    private var colorIndex = 0
+    private var colors: [UIColor] = []
+
+    init(frame: CGRect, colors: [UIColor], delegate: TileViewDelegate) {
+        super.init(frame: frame)
+        self.colors = colors
+        self.delegate = delegate
+        self.backgroundColor = .white
+        self.layer.borderWidth = 1.0
+        self.layer.borderColor = UIColor.black.cgColor
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        colorIndex = (colorIndex + 1) % colors.count
+        self.backgroundColor = colors[colorIndex]
+        
+        delegate?.tileView(self, didSelectColor: colors[colorIndex])
     }
 }
 
-
-struct TileView_Previews: PreviewProvider {
-    static var previews: some View {
-        Tile(width: 100, height: 100, color: .orange)
-    }
-}
+//import SwiftUI
+//
+//struct TileView: View {
+//    @State private var colorIndex = 0
+//    let colors: [Color] = [.red, .green, .blue, .white]
+//
+//    var body: some View {
+//        Rectangle()
+//            .fill(colors[colorIndex])
+//            .frame(width: 100, height: 100)
+//            .onTapGesture {
+//                colorIndex = (colorIndex + 1) % colors.count
+//            }
+//    }
+//}
+//
+//struct TileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TileView()
+//    }
+//}

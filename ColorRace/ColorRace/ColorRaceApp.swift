@@ -11,7 +11,7 @@ import SwiftUI
 struct ColorRaceApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NewContentView()
         }
     }
 }

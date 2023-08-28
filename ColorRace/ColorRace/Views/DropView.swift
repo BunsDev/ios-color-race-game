@@ -16,7 +16,7 @@ extension CGFloat {
 class DropView: UIView {
     private let dropBehavior = FallingTileBehavior()
     private lazy var animator: UIDynamicAnimator = UIDynamicAnimator(referenceView: self)
-    private let dropsPerRow = 10
+    private let dropsPerRow = 3
     var animating: Bool = false {
         didSet {
             if animating {
