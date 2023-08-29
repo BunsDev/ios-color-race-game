@@ -23,9 +23,9 @@ class BoardView: UIView {
     var animating: Bool = false {
         didSet {
             if animating {
-                animator.addBehavior(dropBehavior)
+                //animator.addBehavior(dropBehavior)
                 //shrinkAndDropTiles()
-                //explodeTiles()
+                explodeTiles()
             } else {
                 animator.removeBehavior(dropBehavior)
             }
@@ -87,20 +87,20 @@ class BoardView: UIView {
     
     private func explodeTiles() {
         for subview in tileContainerView.subviews {
-            
+
             let explosionEmitter = CAEmitterLayer()
-            explosionEmitter.emitterShape = .circle
+            explosionEmitter.emitterShape = .rectangle
             explosionEmitter.emitterPosition = subview.center
-            explosionEmitter.emitterSize = CGSize(width: 1, height: 1)
+            explosionEmitter.emitterSize = subview.bounds.size
 
             var cells = [CAEmitterCell]()
             for color in self.tileColors {
                 cells.append(self.confettiWithColor(color: color))
             }
-            
+
             explosionEmitter.emitterCells = cells
             subview.layer.addSublayer(explosionEmitter)
-            
+
             UIView.animate(withDuration: .random(in: 0...1)) {
                  subview.alpha = 0
             } completion: { _ in
@@ -112,20 +112,17 @@ class BoardView: UIView {
     }
 
     private func confettiWithColor(color: UIColor) -> CAEmitterCell {
-        let intensity: Float = 0.5
         let confetti = CAEmitterCell()
-        confetti.birthRate = 6.0 * intensity
-        confetti.lifetime = 14.0 * intensity
-        confetti.lifetimeRange = 0
         confetti.color = color.cgColor
-        confetti.velocity = CGFloat(350.0 * intensity)
-        confetti.velocityRange = CGFloat(80.0 * intensity)
-        confetti.emissionLongitude = CGFloat(Double.pi)
-        confetti.emissionRange = CGFloat(Double.pi)
-        confetti.spin = CGFloat(3.5 * intensity)
-        confetti.spinRange = CGFloat(4.0 * intensity)
-        confetti.scaleRange = CGFloat(intensity)
-        confetti.scaleSpeed = CGFloat(-0.1 * intensity)
+        confetti.birthRate = 5.0
+        confetti.lifetime = 5.0
+        confetti.velocity = 150
+        confetti.emissionLongitude = CGFloat.pi
+        confetti.emissionRange = CGFloat.pi * 2
+        confetti.spin = 3.5
+        confetti.spinRange = 1
+        confetti.scaleRange = 0.5
+        confetti.scaleSpeed = -0.1
         confetti.contents = UIImage.imageWithColor(.white, size: CGSize(width: 5, height: 5)).cgImage
         return confetti
     }

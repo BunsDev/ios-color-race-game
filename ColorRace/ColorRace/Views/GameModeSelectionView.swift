@@ -14,23 +14,29 @@ struct GameModeSelectionView: View {
             VStack {
                 Spacer()
                 Text(Strings.title)
-                    .font(.system(size: GameFontConfig.titleFontSize, weight: .bold, design: .rounded))
+                    .font(.custom("Handlee", size: GameFontConfig.titleFontSize))
                     .padding()
                 HStack(spacing: 20) {
                     NavigationLink(destination: SinglePlayerView()) {
                         Text(Strings.singlePlayer)
-                            .font(.system(size: GameFontConfig.buttonFontSize, weight: .bold, design: .rounded))
+                            .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                            .foregroundColor(.black)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.black, lineWidth: 1)
+                            )
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                    .shadow(color: .black, radius: 1)
                     NavigationLink(destination: MultiPlayerView()) {
                         Text(Strings.multiPlayer)
-                            .font(.system(size: GameFontConfig.buttonFontSize, weight: .bold, design: .rounded))
+                            .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                            .foregroundColor(.black)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.black, lineWidth: 1)
+                            )
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                    .shadow(color: .black, radius: 1)
                 }
                 Spacer()
             }

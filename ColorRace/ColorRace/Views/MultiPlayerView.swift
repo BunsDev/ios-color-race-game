@@ -20,8 +20,13 @@ struct MultiPlayerView: View {
                     socketManager.closeConnection()
                     socketManager.establishConnection()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                .foregroundColor(.black)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.black, lineWidth: 1)
+                )
                 Spacer()
             case .connectingToServer:
                 Spacer()
@@ -31,8 +36,13 @@ struct MultiPlayerView: View {
                 Button("Cancel connection") {
                     socketManager.closeConnection()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                .foregroundColor(.black)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.black, lineWidth: 1)
+                )
                 Spacer()
             case .waitingForOpponent:
                 Spacer()
@@ -42,19 +52,30 @@ struct MultiPlayerView: View {
                 Button("Cancel connection") {
                     socketManager.closeConnection()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                .foregroundColor(.black)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.black, lineWidth: 1)
+                )
                 Spacer()
             case .failure:
                 Spacer()
                 Text("An error occurred while connecting..")
                 Button("Join a game") {
+                    socketManager.closeConnection()
                     socketManager.establishConnection()
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                .foregroundColor(.black)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.black, lineWidth: 1)
+                )
                 Spacer()
-            case .inGame:
+            case .playing:
                 VStack {
                     HStack(alignment: .center) {
                         CardView(card: CardStore.small)
@@ -62,8 +83,13 @@ struct MultiPlayerView: View {
                         Button("x") {
                             print("Quit Game?")
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.red)
+                        .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
                     }
                     .border(.red, width: 1)
 //                    Spacer()

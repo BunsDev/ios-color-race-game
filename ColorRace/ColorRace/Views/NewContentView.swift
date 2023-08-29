@@ -39,7 +39,7 @@ struct NewContentView: View {
             .clipped()
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isMatching = true
             }
         }

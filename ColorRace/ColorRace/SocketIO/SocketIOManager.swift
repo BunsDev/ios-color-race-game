@@ -44,7 +44,7 @@ class SocketIOManager: ObservableObject {
                 self?.gameState = .waitingForOpponent
             } else {
                 print("client => received event: \(SocketEvents.userJoined), socket id(other):\(data)")
-                if self?.gameState != .inGame {
+                if self?.gameState != .playing {
                     self?.gameState = .waitingForOpponent
                 }
             }
@@ -58,7 +58,7 @@ class SocketIOManager: ObservableObject {
             
             if let namespace = self?.namespace, namespace == data {
                 print("client => received event: \(SocketEvents.gameStarted), namespace(self):\(data)")
-                self?.gameState = .inGame
+                self?.gameState = .playing
             } else {
                 print("client => received event: \(SocketEvents.gameStarted), namespace(other):\(data)")
                 self?.gameState = .waitingForOpponent
