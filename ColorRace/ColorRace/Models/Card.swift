@@ -7,50 +7,74 @@
 
 import SwiftUI
 
-internal enum CardType {
+protocol CardProps {
+    var width: CGFloat { get }
+    var height: CGFloat { get }
+    var color: Color { get }
+    var cornerRadius: CGFloat { get }
+    var borderWidth: CGFloat { get }
+    var borderColor: Color { get }
+}
+
+protocol CardBackDrawable {
+    var text: String { get }
+    var font: Font { get }
+    var textColor: Color { get }
+    var innerCornerRadius: CGFloat { get }
+    var innerBorderColor: Color { get }
+    var innerBorderWidth: CGFloat { get }
+}
+
+protocol CardFaceDrawable {
+    var letter: String { get }
+    var suit: String { get }
+    var fontSize: CGFloat { get }
+    var type: CardType { get }
+}
+
+struct CardBack: CardBackDrawable {
+    var text: String
+    var font: Font
+    var textColor: Color
+    var innerCornerRadius: CGFloat
+    var innerBorderColor: Color
+    var innerBorderWidth: CGFloat
+}
+
+struct CardFace: CardFaceDrawable {
+    var letter: String
+    var suit: String
+    var fontSize: CGFloat
+    var type: CardType
+}
+
+enum CardRenderer {
+    case face(drawable: CardFace)
+    case back(drawable: CardBack)
+}
+
+struct CardLayout: CardProps {
+    var width: CGFloat
+    var height: CGFloat
+    var color: Color
+    var cornerRadius: CGFloat
+    var borderWidth: CGFloat
+    var borderColor: Color
+}
+
+struct CardDesign {
+    var layout: CardLayout
+    var renderer: CardRenderer
+}
+
+enum CardType {
     case small
     case medium
     case standard
 }
 
-protocol CardConfiguration {
-    var width: CGFloat { get }
-    var height: CGFloat { get }
-    var faceColor: Color { get }
-    var backColor: Color { get }
-    var isFaceUp: Bool { get set }
-    var faceFontSize: CGFloat { get set }
-    var backFontSize: CGFloat { get set }
-    var rank: String { get set }
-    var symbol: String { get set }
-    var type: CardType { get }
-}
-
-struct Card: CardConfiguration {
-    var width: CGFloat
-    var height: CGFloat
-    var faceColor: Color
-    var backColor: Color
-    var faceFontSize: CGFloat
-    var backFontSize: CGFloat
-    var rank: String
-    var symbol: String
-    var isFaceUp: Bool
-    var type: CardType
-}
-
 struct CardDetail {
-    static let ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-    static let symbols = ["♠️", "♥️", "♦️", "♣️"]
-}
-
-struct CardStore {
-    static let small: Card = Card(width: 50, height: 50, faceColor: .white, backColor: .purple, faceFontSize: 0, backFontSize: 10, rank: CardDetail.ranks.randomElement()!, symbol: CardDetail.symbols.randomElement()!, isFaceUp: false, type: .small)
-    static let medium: Card = Card(width: 90, height: 155, faceColor: .white, backColor: .purple, faceFontSize: 10, backFontSize: 20, rank: CardDetail.ranks.randomElement()!, symbol: CardDetail.symbols.randomElement()!, isFaceUp: false, type: .medium)
-    static let standard: Card = Card(width: 200, height: 330, faceColor: .white, backColor: .purple, faceFontSize: 20, backFontSize: 40, rank: CardDetail.ranks.randomElement()!, symbol: CardDetail.symbols.randomElement()!, isFaceUp: false, type: .standard)
-    
-    func standardCard() -> Card {
-        Card(width: 200, height: 300, faceColor: .white, backColor: .purple, faceFontSize: 20, backFontSize: 40, rank: CardDetail.ranks.randomElement()!, symbol: CardDetail.symbols.randomElement()!, isFaceUp: false, type: .standard)
-    }
+    static let letters = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    static let suits = ["♠️", "♥️", "♦️", "♣️"]
 }
 

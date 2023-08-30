@@ -8,28 +8,25 @@
 import SwiftUI
 
 struct CardBackView: View {
-    @State var card: Card
-    private let cornerRadius: CGFloat = 15.0
-    private let borderWidth: CGFloat = 2.0
-    private let outerBorderColor: Color = .black
-    private let innerBorderColor: Color = .white
+    @State var cardLayout: CardLayout
+    @State var cardBack: CardBackDrawable
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .strokeBorder(outerBorderColor, lineWidth: borderWidth)
-                    .background(RoundedRectangle(cornerRadius: cornerRadius).fill(card.backColor))
+                RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
+                    .strokeBorder(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
+                    .background(RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(cardLayout.color))
                     .frame(width: geometry.size.width, height: geometry.size.height)
                     .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(innerBorderColor, lineWidth: borderWidth)
-                            .background(RoundedRectangle(cornerRadius: cornerRadius).fill(Color.clear))
+                        RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
+                            .strokeBorder(cardBack.innerBorderColor, lineWidth: cardLayout.borderWidth)
+                            .background(RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(Color.clear))
                             .overlay(
-                                Text(Strings.title)
-                                    .foregroundColor(.white)
+                                Text(cardBack.text)
+                                    .foregroundColor(cardBack.textColor)
                                     .multilineTextAlignment(.center)
-                                    .font(.system(size: GameFontConfig.subtitleFontSize, weight: .bold, design: .rounded))
+                                    .font(cardBack.font)
                             )
                             .padding()
                         
@@ -37,21 +34,10 @@ struct CardBackView: View {
             }.frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
-    
-    private func roundedRectangle(_ cornerRadius: CGFloat,
-                                  borderColor: Color,
-                                  borderWidth: CGFloat,
-                                  fillColor: Color) -> some View {
-        return AnyView {
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .strokeBorder(borderColor, lineWidth: borderWidth)
-                .background(RoundedRectangle(cornerRadius: cornerRadius).fill(fillColor))
-        }
-    }
 }
 
 struct CardBackView_Previews: PreviewProvider {
     static var previews: some View {
-        CardBackView(card: CardStore.standard)
+        CardStore.standardCardBackView
     }
 }

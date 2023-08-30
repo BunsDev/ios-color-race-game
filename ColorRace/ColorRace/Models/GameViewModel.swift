@@ -6,3 +6,32 @@
 //
 
 import Foundation
+import SwiftUI
+
+class GameViewModel: ObservableObject {
+    @ObservedObject private var gameManager: GameManager = GameManager()
+    
+    func joinGame() {
+        gameManager.joinGame()
+    }
+    
+    func quitGame() {
+        gameManager.quitGame()
+    }
+    
+    func gameMode() -> GameMode {
+        gameManager.gameMode
+    }
+
+    func gameState() -> GameState {
+        .connectingToServer(connectionText: GameStrings.connectingToServer) //gameManager.gameState
+    }
+    
+    func loadingCardViews() -> [AnyView] {
+        [
+            AnyView(CardStore.mediumCardBackView),
+            AnyView(CardStore.mediumCardBackView),
+            AnyView(CardStore.mediumCardBackView)
+        ]
+    }
+}

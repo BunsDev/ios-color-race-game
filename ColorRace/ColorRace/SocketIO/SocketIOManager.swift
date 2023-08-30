@@ -13,10 +13,14 @@ class SocketIOManager: ObservableObject {
     private var manager: SocketManager
     private var socket: SocketIOClient!
     private let socketURL = URL(string: "http://localhost:3000")!
-    @Published var gameState = GameState.disconnected
     private var namespace: String?
     private let loggingEnabled: Bool = false
+//    @Published var gameState = GameState.disconnected
+    @Published var socketState = SocketConnectionState.disconnected
     
+    
+    
+    // TODO: Update game manager on gameState updates
     private init() {
         manager = SocketManager(socketURL: socketURL, config: [.log(loggingEnabled), .compress])
         socket = manager.defaultSocket
@@ -31,7 +35,8 @@ class SocketIOManager: ObservableObject {
             }
             print("client => received event: \(SocketEvents.userConnected), namespace: \(data)")
             self?.namespace = data
-            self?.gameState = .waitingForOpponent
+//            self?.gameState = .connectingToOpponent
+            self?.socketState = .userConnected
         }
         
         socket.on(SocketEvents.userJoined) { [weak self] data, _ in
@@ -41,12 +46,14 @@ class SocketIOManager: ObservableObject {
             }
             if let socketId = self?.socket.sid, socketId == data {
                 print("client => received event: \(SocketEvents.userJoined), socket id(self):\(data)")
-                self?.gameState = .waitingForOpponent
+//                self?.gameState = .connectingToOpponent
+                self?.socketState = .userJoined
             } else {
                 print("client => received event: \(SocketEvents.userJoined), socket id(other):\(data)")
-                if self?.gameState != .playing {
-                    self?.gameState = .waitingForOpponent
-                }
+                self?.socketState = .opponentJoined
+//                if self?.gameState != .playing {
+//                    self?.gameState = .connectingToOpponent
+//                }
             }
         }
         
@@ -58,10 +65,12 @@ class SocketIOManager: ObservableObject {
             
             if let namespace = self?.namespace, namespace == data {
                 print("client => received event: \(SocketEvents.gameStarted), namespace(self):\(data)")
-                self?.gameState = .playing
+//                self?.gameState = .playing
+                self?.socketState = .gameStarted
             } else {
                 print("client => received event: \(SocketEvents.gameStarted), namespace(other):\(data)")
-                self?.gameState = .waitingForOpponent
+//                self?.gameState = .connectingToOpponent
+                self?.socketState = .gameStarted
             }
         }
         
@@ -74,23 +83,25 @@ class SocketIOManager: ObservableObject {
             if let socketId = self?.socket.sid, socketId == data {
                 print("client => received event: \(SocketEvents.userDisconnected), socket id(self):\(data)")
                 self?.namespace = nil
-                self?.gameState = .disconnected
+//                self?.gameState = .disconnected
+                self?.socketState = .userDisconnected
             } else {
                 print("client => received event: \(SocketEvents.userDisconnected), socket id(other):\(data)")
-                self?.gameState = .waitingForOpponent
+//                self?.gameState = .connectingToOpponent
+                self?.socketState = .opponentDisconnected
             }
         }
 
     }
-    
+
     func establishConnection() {
-        gameState = .connectingToServer
+//        gameState = .connectingToServer
         addEventListeners()
         socket.connect()
     }
     
     func closeConnection() {
-        self.gameState = .disconnected
+//        self.gameState = .disconnected
         guard let namespace = namespace else {
             socket.disconnect()
             return

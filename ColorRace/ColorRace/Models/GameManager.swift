@@ -9,7 +9,16 @@ import Foundation
 import SwiftUI
 
 final class GameManager: ObservableObject {
+    @Published private(set) var gameState: GameState = .disconnected(joinText: GameStrings.joinGame)
     @ObservedObject private var socketManager = SocketIOManager.shared
-    @Published var gameState = GameState.disconnected
+    @State private(set) var gameMode: GameMode = .multiPlayer
+
+    func joinGame() {
+        socketManager.closeConnection()
+        socketManager.establishConnection()
+    }
     
+    func quitGame() {
+        socketManager.closeConnection()
+    }
 }

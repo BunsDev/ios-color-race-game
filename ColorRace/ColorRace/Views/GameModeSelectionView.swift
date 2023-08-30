@@ -8,39 +8,38 @@
 import SwiftUI
 
 struct GameModeSelectionView: View {
-
+    
     var body: some View {
         NavigationView {
             VStack {
                 Spacer()
-                Text(Strings.title)
-                    .font(.custom("Handlee", size: GameFontConfig.titleFontSize))
+                Text(GameStrings.title)
+                    .font(GameUx.titleFont())
                     .padding()
                 HStack(spacing: 20) {
-                    NavigationLink(destination: SinglePlayerView()) {
-                        Text(Strings.singlePlayer)
-                            .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.black, lineWidth: 1)
-                            )
+                    NavigationLink(destination: GameView()) {
+                        textView(GameStrings.singlePlayer)
                     }
-                    NavigationLink(destination: MultiPlayerView()) {
-                        Text(Strings.multiPlayer)
-                            .font(.custom("Handlee", size: GameFontConfig.buttonFontSize))
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.black, lineWidth: 1)
-                            )
+                    NavigationLink(destination: GameView()) {
+                        textView(GameStrings.multiPlayer)
                     }
                 }
                 Spacer()
             }
         }
+    }
+    
+    private func textView(_ title: String) -> some View {
+        return AnyView(
+            Text(title)
+                .font(GameUx.buttonFont())
+                .foregroundColor(.black)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.black, lineWidth: 1)
+                )
+        )
     }
 }
 
