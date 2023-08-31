@@ -20,7 +20,7 @@ extension Animation {
 /// An animate card loading view that displays a stack of cards that fan out
 struct CardLoadingView: View {
     @State var cards: [AnyView]
-    @State var animate = false
+    @State var animate = true
     
     var body: some View {
         ZStack {

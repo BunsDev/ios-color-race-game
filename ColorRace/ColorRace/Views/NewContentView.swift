@@ -29,9 +29,9 @@ struct NewContentView: View {
             VStack { // game board view
                 GeometryReader { geometry in
                     VStack {
-                        BoardViewRepresentable(isMatching: $isMatching)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .border(.red, width: 1)
+//                        BoardViewRepresentable(isMatching: $isMatching)
+//                            .frame(width: geometry.size.width, height: geometry.size.height)
+//                            .border(.red, width: 1)
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
                 }

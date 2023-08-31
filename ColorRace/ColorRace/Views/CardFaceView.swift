@@ -10,6 +10,7 @@ import SwiftUI
 struct CardFaceView: View {
     @State var cardLayout: CardLayout
     @State var cardFace: CardFaceDrawable
+    @Binding var degree : Double
     
     var body: some View {
         GeometryReader { geometry in
@@ -26,6 +27,7 @@ struct CardFaceView: View {
                         RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
                             .stroke(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
                     )
+                    .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))
             }
         }
     }
@@ -33,14 +35,14 @@ struct CardFaceView: View {
     private func fullFaceView() -> some View {
         return VStack {
             topDetailView()
-            ColorGridView(cardType: cardFace.type)
+            ColorGridView(cardType: cardFace.type, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
                 .padding()
             bottomDetailView()
         }
     }
     
     private func miniFaceView() -> some View {
-        ColorGridView(cardType: cardFace.type)
+        ColorGridView(cardType: cardFace.type, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
     }
     
     private func topDetailView() -> some View {

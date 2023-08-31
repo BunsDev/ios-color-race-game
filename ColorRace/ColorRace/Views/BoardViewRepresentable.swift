@@ -12,9 +12,10 @@ import SwiftUI
 struct BoardViewRepresentable: UIViewRepresentable {
     typealias UIViewType = BoardView
     @Binding var isMatching: Bool
+    @Binding var boardColors: [[UIColor]]
     
     func makeUIView(context: Context) -> BoardView {
-        let boardView = BoardView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        let boardView = BoardView(frame: CGRect(x: 0, y: 0, width: 300, height: 300), boardColors: boardColors)
         boardView.addTiles()
         return boardView
     }

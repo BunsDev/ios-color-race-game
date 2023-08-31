@@ -15,11 +15,11 @@ struct CardStore {
     static let mediumCardBackView = CardView(cardDesign: CardDesign(layout: mediumCardLayout, renderer: .back(drawable: mediumCardBack)))
     
     static let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
-    static let standardCardBackView = CardBackView(cardLayout: standardCardLayout, cardBack: standardCardBack)
+    static let standardCardBackView = CardBackView(cardLayout: standardCardLayout, cardBack: standardCardBack, degree: .constant(0))
     
     static let mediumCardFace = CardFace(letter: "A", suit: "♠️", fontSize: 10, type: .medium)
-    static let mediumCardFaceView = CardFaceView(cardLayout: mediumCardLayout, cardFace: mediumCardFace)
+    static let mediumCardFaceView = CardFaceView(cardLayout: mediumCardLayout, cardFace: mediumCardFace, degree: .constant(0))
     
     static let standardCardFace = CardFace(letter: "A", suit: "♣️", fontSize: 20, type: .standard)
-    static let standardCardFaceView = CardFaceView(cardLayout: standardCardLayout, cardFace: standardCardFace)
+    static let standardCardFaceView = CardFaceView(cardLayout: standardCardLayout, cardFace: standardCardFace, degree: .constant(0))
 }

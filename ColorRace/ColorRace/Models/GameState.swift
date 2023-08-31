@@ -7,10 +7,11 @@
 
 import Foundation
 
-internal enum GameState {
+internal enum GameState: Equatable {
     case disconnected(joinText: String)
     case connectingToServer(connectionText: String)
     case connectingToOpponent(connectionText: String)
     case failure(errorText: String)
+    case preparingGame
     case playing
 }

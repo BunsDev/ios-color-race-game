@@ -17,15 +17,24 @@ class BoardView: UIView {
     private let tileSize = CGSize(width: 100, height: 100)
     private let tileContainerView = UIView()
     private let tileColors: [UIColor] = [.red, .blue, .orange, .yellow, .green, .white]
-//    private var targetColors: [[UIColor]] = []
-    private var targetColors: [[UIColor]] = [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]]
+    private var boardColors: [[UIColor]]
+
+    init(frame: CGRect, boardColors: [[UIColor]]) {
+        self.boardColors = boardColors
+        super.init(frame: frame)
+        self.frame = frame
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     var animating: Bool = false {
         didSet {
             if animating {
-                //animator.addBehavior(dropBehavior)
+                animator.addBehavior(dropBehavior)
                 //shrinkAndDropTiles()
-                explodeTiles()
+                //explodeTiles()
             } else {
                 animator.removeBehavior(dropBehavior)
             }
@@ -37,7 +46,7 @@ class BoardView: UIView {
     }
     
     func addTiles() {
-        generateRandomTargetColors()
+        generateRandomboardColors()
         tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow), height: tileSize.height * CGFloat(tilesPerRow)))
         for row in 0..<tilesPerRow {
             for col in 0..<tilesPerRow {
@@ -48,7 +57,7 @@ class BoardView: UIView {
                     height: tileSize.height
                 )
                 let tileView = TileView(frame: frame, colors: tileColors, delegate: self)
-                tileView.backgroundColor = tileColors.randomElement() // TODO: remove
+                tileView.backgroundColor = .white//tileColors.randomElement() // TODO: remove
                 tileContainerView.addSubview(tileView)
             }
         }
@@ -56,13 +65,13 @@ class BoardView: UIView {
         tileContainerView.center = self.center
     }
     
-    private func generateRandomTargetColors() {
-//        targetColors = (0..<tilesPerRow).map { _ in
+    private func generateRandomboardColors() {
+//        boardColors = (0..<tilesPerRow).map { _ in
 //            return (0..<tilesPerRow).map { _ in
 //                return tileColors.randomElement() ?? .white
 //            }
 //        }
-        print(targetColors)
+        print(boardColors)
     }
     
     private func shrinkAndDropTiles() {
@@ -136,16 +145,17 @@ extension BoardView: TileViewDelegate {
         let row = index / tilesPerRow
         let col = index % tilesPerRow
 
-        if targetColors[row][col] == color {
+        if boardColors[row][col] == color {
             let allMatch = tileContainerView.subviews.enumerated().allSatisfy { (index, subview) in
                 let row = index / tilesPerRow
                 let col = index % tilesPerRow
-                return targetColors[row][col] == subview.backgroundColor
+                return boardColors[row][col] == subview.backgroundColor
             }
 
             if allMatch {
                 print("WON!")
-                explodeTiles()
+//                explodeTiles()
+                shrinkAndDropTiles()
             }
         }
     }

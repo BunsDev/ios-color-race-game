@@ -24,14 +24,8 @@ class GameViewModel: ObservableObject {
     }
 
     func gameState() -> GameState {
-        .connectingToServer(connectionText: GameStrings.connectingToServer) //gameManager.gameState
+        gameManager.gameState
     }
     
-    func loadingCardViews() -> [AnyView] {
-        [
-            AnyView(CardStore.mediumCardBackView),
-            AnyView(CardStore.mediumCardBackView),
-            AnyView(CardStore.mediumCardBackView)
-        ]
-    }
+    
 }

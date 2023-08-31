@@ -15,6 +15,7 @@ internal struct GameStrings {
     static let close = " X "
     static let joinGame = "Join a game"
     static let connectingToServer = "Connecting to server..."
+    static let waitingForOpponent = "Waiting for opponent..."
     static let cancel = "Cancel"
 }
 

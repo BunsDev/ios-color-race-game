@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ColorGridView: View {
     let cardType: CardType
-    private let colors: [Color] = [.red, .blue, .orange, .yellow, .white]
+    private let predefinedColors: [UIColor] = [.red, .blue, .orange, .yellow, .white]
+    let colors: [[UIColor]]// = [.red, .blue, .orange, .yellow, .white]
+    @State private var randomize: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -18,7 +21,8 @@ struct ColorGridView: View {
                     HStack(spacing: 0) {
                         ForEach(0..<3, id: \.self) { column in
                             Rectangle()
-                                .fill(colors.randomElement()!)
+                                .fill(Color(colors[row][column]))
+//                                .fill(colors.randomElement()!)
                                 .border(Color.black, width: cardType == .small ? 0.3 : 1)
                                 .frame(width: geometry.size.width/3, height: geometry.size.width/3)
                         }
@@ -31,6 +35,6 @@ struct ColorGridView: View {
 
 struct ColorGridView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorGridView(cardType: .small)
+        ColorGridView(cardType: .small, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
     }
 }

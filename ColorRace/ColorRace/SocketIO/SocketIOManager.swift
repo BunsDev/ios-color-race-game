@@ -9,7 +9,7 @@ import Foundation
 import SocketIO
 
 class SocketIOManager: ObservableObject {
-    static let shared = SocketIOManager()
+//    static let shared = SocketIOManager()
     private var manager: SocketManager
     private var socket: SocketIOClient!
     private let socketURL = URL(string: "http://localhost:3000")!
@@ -21,7 +21,7 @@ class SocketIOManager: ObservableObject {
     
     
     // TODO: Update game manager on gameState updates
-    private init() {
+    init() {
         manager = SocketManager(socketURL: socketURL, config: [.log(loggingEnabled), .compress])
         socket = manager.defaultSocket
     }

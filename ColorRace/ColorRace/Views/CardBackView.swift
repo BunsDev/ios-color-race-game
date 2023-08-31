@@ -10,6 +10,7 @@ import SwiftUI
 struct CardBackView: View {
     @State var cardLayout: CardLayout
     @State var cardBack: CardBackDrawable
+    @Binding var degree : Double
     
     var body: some View {
         GeometryReader { geometry in
@@ -31,7 +32,9 @@ struct CardBackView: View {
                             .padding()
                         
                     )
-            }.frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))
         }
     }
 }
