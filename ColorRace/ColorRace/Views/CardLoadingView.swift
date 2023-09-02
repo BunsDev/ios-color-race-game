@@ -5,8 +5,11 @@
 //  Created by Anup D'Souza on 19/08/23.
 //
 
+
 import SwiftUI
 
+// TODO: Enhancemente
+// 1. Calculate correct rotation degrees for varying number of cards
 extension Animation {
     func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
         if expression {
@@ -20,8 +23,8 @@ extension Animation {
 /// An animate card loading view that displays a stack of cards that fan out
 struct CardLoadingView: View {
     @State var cards: [AnyView]
-    @State var animate = true
-    
+    @Binding var animate: Bool
+
     var body: some View {
         ZStack {
             ForEach(0..<cards.count, id: \.self) { index in
@@ -29,20 +32,11 @@ struct CardLoadingView: View {
                 view
                     .offset(x: animate ? CGFloat(index - midIndex()) * 10 : 0)
                     .rotationEffect(.degrees(animate ? Double(index - midIndex()) * 10 : 0), anchor: .bottom)
-//                    .animation(Animation.easeInOut(duration: 1).delay(0.25).repeat(while: animate), value: animate)
+                    .animation(Animation.easeInOut(duration: 1).delay(0.25).repeat(while: animate), value: animate)
             }
         }
-        .onAppear() {
-            startAnimation()
-        }
     }
-    
-    func startAnimation() {
-        withAnimation(Animation.linear(duration: 0.75).delay(0.25).repeatForever(autoreverses: true)) {
-            animate.toggle()
-        }
-    }
-    
+
     private func midIndex() -> Int {
         return cards.count / 2
     }
@@ -62,6 +56,6 @@ struct CardContainerView_Previews: PreviewProvider {
             AnyView(cardBackView),
             AnyView(cardBackView)
         ]
-        CardLoadingView(cards: cards)
+        CardLoadingView(cards: cards, animate: .constant(true))
     }
 }

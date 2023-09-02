@@ -12,10 +12,14 @@ internal struct GameStrings {
     static let singlePlayer = "1 Player"
     static let multiPlayer = "2 Player"
     static let comingSoon = "Coming soon..."
-    static let close = " X "
+    static let close = "X"
     static let joinGame = "Join a game"
     static let connectingToServer = "Connecting to server..."
     static let waitingForOpponent = "Waiting for opponent..."
+    static let opponentFound = "Opponent found..."
     static let cancel = "Cancel"
+    static let go = "Go !"
+    static let player1 = "You"
+    static let player2 = "Player 2"
 }
 

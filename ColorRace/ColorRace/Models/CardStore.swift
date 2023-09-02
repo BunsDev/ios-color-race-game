@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct CardStore {
     static let mediumCardLayout = CardLayout(width: 90, height: 155, color: .white, cornerRadius: 5, borderWidth: 1, borderColor: .black)
@@ -22,4 +23,6 @@ struct CardStore {
     
     static let standardCardFace = CardFace(letter: "A", suit: "♣️", fontSize: 20, type: .standard)
     static let standardCardFaceView = CardFaceView(cardLayout: standardCardLayout, cardFace: standardCardFace, degree: .constant(0))
+    
+    static let defaultBoardColors: [[UIColor]] = Array(repeating: Array(repeating: UIColor.white, count: 3), count: 3)// [[.white, .white, .white], [.white, .white, .white], [.white, .white, .white]]
 }

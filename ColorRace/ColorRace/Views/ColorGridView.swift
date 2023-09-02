@@ -10,9 +10,12 @@ import UIKit
 
 struct ColorGridView: View {
     let cardType: CardType
+    let colors: [[UIColor]]
+    
+    private let defaultBoardColor: Color = .white
     private let predefinedColors: [UIColor] = [.red, .blue, .orange, .yellow, .white]
-    let colors: [[UIColor]]// = [.red, .blue, .orange, .yellow, .white]
     @State private var randomize: Bool = false
+    @State private var displayDefault: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
@@ -21,8 +24,7 @@ struct ColorGridView: View {
                     HStack(spacing: 0) {
                         ForEach(0..<3, id: \.self) { column in
                             Rectangle()
-                                .fill(Color(colors[row][column]))
-//                                .fill(colors.randomElement()!)
+                                .fill(fillColor(row: row, col: column))
                                 .border(Color.black, width: cardType == .small ? 0.3 : 1)
                                 .frame(width: geometry.size.width/3, height: geometry.size.width/3)
                         }
@@ -30,6 +32,17 @@ struct ColorGridView: View {
                 }
             }
         }
+    }
+    
+    private func fillColor(row: Int, col: Int) -> Color {
+        guard displayDefault else {
+            if randomize, let color = predefinedColors.randomElement() {
+                return Color(uiColor: color)
+            } else {
+                return Color(colors[row][col])
+            }
+        }
+        return .white
     }
 }
 

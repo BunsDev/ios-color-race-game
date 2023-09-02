@@ -11,18 +11,21 @@ import SwiftUI
 struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
+    @ObservedObject private var cardFlipAnimator = CardFlipAnimator()
     @State private var waiting = false
+    @State private var infoBarOpacity: Double = 0
+    @State private var isMinimised = false
+    @Namespace private var cardMinifyAnimation
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont()]
     }
-
+    
     var body: some View {
         VStack {
             switch gameManager.gameMode {
             case .multiPlayer:
                 multiPlayerView()
-                
             case .singlePlayer:
                 singlePlayerView()
             }
@@ -33,11 +36,7 @@ struct GameView: View {
         .font(GameUx.subtitleFont())
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(GameStrings.close) {
-                    self.presentation.wrappedValue.dismiss()
-                }
-                .font(GameUx.buttonFont())
-                .foregroundColor(.black)
+                navigationToolbarCloseButton()
             }
         }
         .navigationBarBackButtonHidden()
@@ -46,136 +45,58 @@ struct GameView: View {
         }
         .onAppear{
             waiting = true
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-//                self.waiting = false
-//            }
         }
     }
     
-    private func multiPlayerView() -> some View {
-        return AnyView(
-            VStack{
-                switch gameManager.gameState {
-                case .disconnected(let text), .failure(let text):
-                    joinGameView(text)
-                case .connectingToServer(let text), .connectingToOpponent(let text):
-                    connectingView(text)
-                case .preparingGame:
-                    connectingView("Opponent found !")
-                case .playing:
-                    gameView()
-                }
-            }
-        )
+    @ViewBuilder private func navigationToolbarCloseButton() -> some View {
+        Button(GameStrings.close) {
+            self.presentation.wrappedValue.dismiss()
+        }
+        .font(GameUx.buttonFont())
+        .foregroundColor(.black)
+        .padding(.horizontal)
     }
-
-    private func joinGameView(_ text: String) -> some View {
-        return AnyView(
+    
+    @ViewBuilder private func joinGameView(_ text: String) -> some View {
+        VStack {
+            Button(text) {
+                gameManager.joinGame()
+            }
+            .font(GameUx.buttonFont())
+            .foregroundColor(.black)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.black, lineWidth: 1)
+            )
+        }
+    }
+    
+    @ViewBuilder private func multiPlayerView() -> some View {
+        VStack {
+            switch gameManager.gameState {
+            case .disconnected(let text), .failure(let text):
+                joinGameView(text)
+            case .connectingToServer(let text), .connectingToOpponent(let text):
+                connectingView(text)
+            case .preparingGame:
+                connectingView(GameStrings.opponentFound)
+            case .playing:
+                gameView()
+            }
+        }
+    }
+    
+    @State var animateLoadingView = false
+    @ViewBuilder private func connectingView(_ text: String) -> some View {
+        VStack(spacing: 40) {
             VStack {
-                Button(text) {
-                    gameManager.joinGame()
-                }
-                .font(GameUx.buttonFont())
-                .foregroundColor(.black)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.black, lineWidth: 1)
-                )
-            }
-        )
-    }
-    
-    // TODO: Create Card animator instance for flip animation
-    @State var backDegree = 0.0
-    @State var frontDegree = -90.0
-    @State var isFlipped = false
-    @State var flipAnimationCompleted = false
-    
-    let durationAndDelay : CGFloat = 0.3
-    @State var infoBarOpacity: Double = 0
-    @State var isMinimised = false
-    
-    func flipCard () {
-        // TODO: limit flip animation to times = 1 only and notify parent via flipAnimationCompleted or something else using dispatch queue with the accumulated sum of durationAndDelay required for animation to complete
-        isFlipped = !isFlipped
-        if isFlipped {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                backDegree = 90
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)){
-                frontDegree = 0
-            }
-        } else {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                frontDegree = -90
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)){
-                backDegree = 0
-            }
-        }
-    }
-
-    @Namespace private var animation
-    private func connectingView(_ text: String) -> some View {
-        return AnyView(
-            VStack(spacing: 40) {
-                if waiting {
-                    CardLoadingView(cards: loadingCardViews())
-                } else {
-                    // info view
-                    VStack {
-                        HStack {
-                            if isMinimised {
-                                VStack {
-                                    Text("You")
-                                        .frame(height: 25)
-                                    ColorGridView(cardType: .small, colors: gameManager.boardColors)
-                                        .frame(width: 60, height: 60)
-                                        .matchedGeometryEffect(id: "shape", in: animation)
-                                }
-                                .padding(.horizontal)
-                            }
-                            Spacer()
-                            Text("Go !")
-                                .frame(minWidth: 150)
-                            Spacer()
-                            VStack {
-                                Text("Player 2")
-                                    .frame(height: 25)
-                                Color.mint
-                                    .frame(width: 60, height: 60)
-                            }
-                            .padding(.horizontal)
-                        }
-                        .border(.green, width: 1)
-                    }
-                    .opacity(infoBarOpacity)
-                    .frame(height: 100)
-//                    .frame(width: geometry.size.width, height: 100)
-                    if isMinimised == false {
-                        VStack {
-                            // TODO: swap out to a preparing view
-                            ZStack {
-                                CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFace, degree: $frontDegree)
-                                CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $backDegree)
-                            }
-                            .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
-                            .matchedGeometryEffect(id: "shape", in: animation)
-                        }
-                    }
-                }
+                gameInfoView()
+                    .opacity(1.0)
+                CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
                 Text(text)
-                    .font(GameUx.subtitleFont())
                 Button(GameStrings.cancel) {
-                    if gameManager.gameState == .preparingGame {
-//                        flipCard()
-                        withAnimation(.spring()) {
-                            isMinimised.toggle()
-                        }
-                    } else {
-                        gameManager.quitGame()
-                    }
+                    gameManager.quitGame()
                 }
                 .font(GameUx.buttonFont())
                 .foregroundColor(.black)
@@ -185,73 +106,67 @@ struct GameView: View {
                         .stroke(Color.black, lineWidth: 1)
                 )
                 .onAppear {
-                    if gameManager.gameState == .preparingGame {
-                        waiting = false
-                        DispatchQueue.main.async {
-                            self.flipCard()
-                        }
-                        withAnimation(Animation.linear(duration: 0.5)) {
-                            infoBarOpacity = 1
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            
-                            withAnimation(.spring()) {
-                                isMinimised.toggle()
-                            }
-                        }
-                    } else {
-                        waiting = true
+                    if gameManager.gameState != .preparingGame {
+                        animateLoadingView = true
                     }
                 }
             }
-        )
+            .onReceive(gameManager.$gameState) { state in
+                print("received game state... \(state)")
+                
+                if state == .preparingGame {
+                    animateLoadingView = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        cardFlipAnimator.flipCard()
+                    }
+                }
+            }
+        }
     }
     
-    private func gameView() -> some View {
-        return AnyView(
+    @ViewBuilder private func gameView() -> some View {
+        VStack {
+            GeometryReader { geometry in
+                gameInfoView()
+                VStack {
+                    BoardViewRepresentable(isMatching: .constant(true), boardColors: $gameManager.boardColors)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .border(.red, width: 1)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+        }
+        .clipped()
+    }
+    
+    @ViewBuilder private func gameInfoView() -> some View {
+        HStack {
             VStack {
-                GeometryReader { geometry in
-                    VStack {
-                        HStack {
-                            VStack {
-                                Text("You")
-                                    .frame(height: 25)
-                                ColorGridView(cardType: .small, colors: gameManager.boardColors)
-                                    .frame(width: 60, height: 60)
-                            }
-                            .padding(.horizontal)
-                            Spacer()
-                            Text("Go !")
-                                .frame(minWidth: 150)
-                            Spacer()
-                            VStack {
-                                Text("Player 2")
-                                    .frame(height: 25)
-                                Color.mint
-                                    .frame(width: 60, height: 60)
-                            }
-                            .padding(.horizontal)
-                        }
-                        .border(.green, width: 1)
-                    }
-                    .frame(width: geometry.size.width, height: 100)
-                    VStack {
-                        BoardViewRepresentable(isMatching: .constant(true), boardColors: $gameManager.boardColors)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .border(.red, width: 1)
-                    }
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                }
+                Text(GameStrings.player1)
+                    .frame(height: 25)
+                ColorGridView(cardType: .small, colors: gameManager.boardColors)
+                    .frame(width: 60, height: 60)
             }
-            .clipped()
-        )
+            .padding(.horizontal)
+            Spacer()
+            Text(GameStrings.go)
+                .frame(minWidth: 150)
+            Spacer()
+            VStack {
+                Text(GameStrings.player2)
+                    .frame(height: 25)
+                ColorGridView(cardType: .small, colors: CardStore.defaultBoardColors)
+                    .frame(width: 60, height: 60)
+            }
+            .padding(.horizontal)
+        }
+        .border(.green, width: 1)
+        .frame(height: 100)
     }
     
-    private func singlePlayerView() -> some View {
-        return AnyView(
-            Text(GameStrings.comingSoon)
-                .font(GameUx.buttonFont())
-        )
+    @ViewBuilder private func singlePlayerView() -> some View {
+        Text(GameStrings.comingSoon)
+            .font(GameUx.buttonFont())
     }
 }
 
