@@ -13,8 +13,9 @@ struct GameView: View {
     @ObservedObject private var gameManager = GameManager()
     @ObservedObject private var cardFlipAnimator = CardFlipAnimator()
     @State private var waiting = false
-    @State private var infoBarOpacity: Double = 0
+    @State private var gameInfoViewOpacity: Double = 0
     @State private var isMinimised = false
+    @State var animateLoadingView = false
     @Namespace private var cardMinifyAnimation
     
     init() {
@@ -29,7 +30,6 @@ struct GameView: View {
             case .singlePlayer:
                 singlePlayerView()
             }
-            
         }
         .border(.cyan, width: 1)
         .navigationBarTitle(GameStrings.title)
@@ -85,16 +85,31 @@ struct GameView: View {
                 gameView()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    @State var animateLoadingView = false
     @ViewBuilder private func connectingView(_ text: String) -> some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 0) {
             VStack {
                 gameInfoView()
-                    .opacity(1.0)
-                CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
+                    .opacity(gameInfoViewOpacity)
+                Spacer()
+                if gameManager.gameState != .preparingGame {
+                    CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
+                } else {
+                    if isMinimised == false {
+                        VStack {
+                            ZStack {
+                                CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFace, degree: $cardFlipAnimator.frontDegree)
+                                CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
+                            }
+                            .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+                            .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
+                        }
+                    }
+                }
                 Text(text)
+                    .padding(.vertical)
                 Button(GameStrings.cancel) {
                     gameManager.quitGame()
                 }
@@ -105,20 +120,34 @@ struct GameView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.black, lineWidth: 1)
                 )
-                .onAppear {
-                    if gameManager.gameState != .preparingGame {
-                        animateLoadingView = true
-                    }
+                Spacer()
+            }
+            .onAppear {
+                if gameManager.gameState != .preparingGame {
+                    animateLoadingView = true
                 }
             }
             .onReceive(gameManager.$gameState) { state in
                 print("received game state... \(state)")
                 
-                if state == .preparingGame {
+                if gameManager.gameState == .preparingGame {
                     animateLoadingView = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(Animation.linear(duration: 0.5)) {
+                        gameInfoViewOpacity = 1
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         cardFlipAnimator.flipCard()
                     }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        withAnimation(.easeInOut) {
+                            isMinimised.toggle()
+                        }
+                    }
+                } else {
+                    animateLoadingView = true
+                    gameInfoViewOpacity = 0
                 }
             }
         }
@@ -141,13 +170,24 @@ struct GameView: View {
     
     @ViewBuilder private func gameInfoView() -> some View {
         HStack {
-            VStack {
-                Text(GameStrings.player1)
-                    .frame(height: 25)
-                ColorGridView(cardType: .small, colors: gameManager.boardColors)
-                    .frame(width: 60, height: 60)
+            if isMinimised {
+                VStack {
+                    Text(GameStrings.player1)
+                        .frame(height: 25)
+                    ColorGridView(cardType: .small, colors: gameManager.boardColors)
+                        .frame(width: 60, height: 60)
+                        .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
+                }
+                .padding(.horizontal)
+            } else {
+                VStack {
+                    Text(GameStrings.player1)
+                        .frame(height: 25)
+                    ColorGridView(cardType: .small, colors: gameManager.boardColors)
+                        .frame(width: 60, height: 60)
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
             Spacer()
             Text(GameStrings.go)
                 .frame(minWidth: 150)

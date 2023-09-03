@@ -28,8 +28,7 @@ struct CardLoadingView: View {
     var body: some View {
         ZStack {
             ForEach(0..<cards.count, id: \.self) { index in
-                let view = cards[index]
-                view
+                cards[index]
                     .offset(x: animate ? CGFloat(index - midIndex()) * 10 : 0)
                     .rotationEffect(.degrees(animate ? Double(index - midIndex()) * 10 : 0), anchor: .bottom)
                     .animation(Animation.easeInOut(duration: 1).delay(0.25).repeat(while: animate), value: animate)
