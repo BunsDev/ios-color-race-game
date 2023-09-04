@@ -87,6 +87,8 @@ extension GameManager {
             setupBoard()
 //            gameState = .playing
             gameState = .preparingGame
+        case .connectingToServer:
+            gameState = .connectingToServer(connectionText: GameStrings.connectingToServer)
         }
     }
 }
@@ -163,6 +165,7 @@ extension GameManager {
 
     private func establishConnection() {
 //        gameState = .connectingToServer
+        socketState = .connectingToServer
         addEventListeners()
         socket?.connect()
     }

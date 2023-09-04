@@ -22,4 +22,5 @@ internal enum SocketConnectionState {
     case userDisconnected
     case opponentDisconnected
     case gameStarted
+    case connectingToServer
 }

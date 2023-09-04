@@ -15,7 +15,7 @@ struct GameView: View {
     @State private var waiting = false
     @State private var gameInfoViewOpacity: Double = 0
     @State private var isMinimised = false
-    @State var animateLoadingView = false
+    @State var animateLoadingView = true
     @Namespace private var cardMinifyAnimation
     
     init() {
@@ -43,8 +43,11 @@ struct GameView: View {
         .onDisappear {
             gameManager.quitGame()
         }
-        .onAppear{
-            waiting = true
+        .onAppear {
+            waiting = false
+            animateLoadingView = true
+            isMinimised = false
+            gameInfoViewOpacity = 0
         }
     }
     
@@ -127,26 +130,51 @@ struct GameView: View {
                     animateLoadingView = true
                 }
             }
+//            .onChange(of: gameManager.gameState, perform: { newValue in
+//                print("current gamestate: \(gameManager.gameState), received gamestate: \(newValue)")
+//                if gameManager.gameState == .preparingGame {
+//                    animateLoadingView = false
+//                    withAnimation(Animation.linear(duration: 0.5)) {
+//                        gameInfoViewOpacity = 1
+//                    }
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                        cardFlipAnimator.flipCard()
+//                    }
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                        withAnimation(.easeInOut) {
+//                            isMinimised.toggle()
+//                        }
+//                    }
+//                } else {
+//                    animateLoadingView = true
+//                    gameInfoViewOpacity = 0
+//                }
+//            })
             .onReceive(gameManager.$gameState) { state in
-                print("received game state... \(state)")
-                
-                if gameManager.gameState == .preparingGame {
-                    animateLoadingView = false
+                print("current gamestate: \(gameManager.gameState), received gamestate: \(state)")
+
+                if state == .preparingGame {
+                    animateLoadingView = true
                     withAnimation(Animation.linear(duration: 0.5)) {
                         gameInfoViewOpacity = 1
                     }
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         cardFlipAnimator.flipCard()
                     }
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         withAnimation(.easeInOut) {
-                            isMinimised.toggle()
+//                            isMinimised.toggle()
+                            isMinimised = true
                         }
                     }
                 } else {
                     animateLoadingView = true
+                    isMinimised = false
+                    cardFlipAnimator.setDefaults()
                     gameInfoViewOpacity = 0
                 }
             }
