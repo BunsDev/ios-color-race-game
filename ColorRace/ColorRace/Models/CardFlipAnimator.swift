@@ -16,25 +16,15 @@ class CardFlipAnimator: ObservableObject {
     @Published var frontDegree = -90.0
     @Published private var isFlipped = false
     @Published private var flipAnimationCompleted = false
-    private let durationAndDelay : CGFloat = 0.3
+    private let durationAndDelay: CGFloat = 0.3
     
     func flipCard () {
-//        isFlipped = !isFlipped
-//        if isFlipped {
-            withAnimation(.linear(duration: durationAndDelay)) {
-                backDegree = 90
-            }
-            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)){
-                frontDegree = 0
-            }
-//        } else {
-//            withAnimation(.linear(duration: durationAndDelay)) {
-//                frontDegree = -90
-//            }
-//            withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)){
-//                backDegree = 0
-//            }
-//        }
+        withAnimation(.linear(duration: durationAndDelay)) {
+            backDegree = 90
+        }
+        withAnimation(.linear(duration: durationAndDelay).delay(durationAndDelay)){
+            frontDegree = 0
+        }
     }
     
     func setDefaults() {

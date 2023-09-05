@@ -10,7 +10,7 @@ import SwiftUI
 struct CardBackView: View {
     @State var cardLayout: CardLayout
     @State var cardBack: CardBackDrawable
-    @Binding var degree : Double
+    @Binding var degree: Double
     
     var body: some View {
         GeometryReader { geometry in
@@ -30,7 +30,6 @@ struct CardBackView: View {
                                     .font(cardBack.font)
                             )
                             .padding()
-                        
                     )
             }
             .frame(width: geometry.size.width, height: geometry.size.height)

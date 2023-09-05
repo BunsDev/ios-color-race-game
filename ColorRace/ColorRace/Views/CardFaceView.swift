@@ -10,7 +10,7 @@ import SwiftUI
 struct CardFaceView: View {
     @State var cardLayout: CardLayout
     @State var cardFace: CardFaceDrawable
-    @Binding var degree : Double
+    @Binding var degree: Double
     
     var body: some View {
         GeometryReader { geometry in

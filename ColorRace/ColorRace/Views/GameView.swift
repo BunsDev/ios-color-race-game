@@ -12,10 +12,9 @@ struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
     @ObservedObject private var cardFlipAnimator = CardFlipAnimator()
-    @State private var waiting = false
     @State private var gameInfoViewOpacity: Double = 0
     @State private var isMinimised = false
-    @State var animateLoadingView = true
+    @State private var animateLoadingView = false
     @Namespace private var cardMinifyAnimation
     
     init() {
@@ -31,23 +30,17 @@ struct GameView: View {
                 singlePlayerView()
             }
         }
-        .border(.cyan, width: 1)
-        .navigationBarTitle(GameStrings.title)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .font(GameUx.subtitleFont())
+        .navigationBarTitle(GameStrings.title)
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 navigationToolbarCloseButton()
             }
         }
-        .navigationBarBackButtonHidden()
         .onDisappear {
             gameManager.quitGame()
-        }
-        .onAppear {
-            waiting = false
-            animateLoadingView = true
-            isMinimised = false
-            gameInfoViewOpacity = 0
         }
     }
     
@@ -60,127 +53,96 @@ struct GameView: View {
         .padding(.horizontal)
     }
     
-    @ViewBuilder private func joinGameView(_ text: String) -> some View {
-        VStack {
-            Button(text) {
-                gameManager.joinGame()
-            }
-            .font(GameUx.buttonFont())
-            .foregroundColor(.black)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black, lineWidth: 1)
-            )
+    @ViewBuilder private func multiPlayerView() -> some View {
+        switch gameManager.gameState {
+        case .disconnected(let text), .failure(let text):
+            joinGameView(text)
+        case .connectingToServer(let text), .connectingToOpponent(let text):
+            connectingView(text)
+        case .preparingGame:
+            connectingView(GameStrings.opponentFound)
+        case .playing:
+            gameView()
         }
     }
     
-    @ViewBuilder private func multiPlayerView() -> some View {
-        VStack {
-            switch gameManager.gameState {
-            case .disconnected(let text), .failure(let text):
-                joinGameView(text)
-            case .connectingToServer(let text), .connectingToOpponent(let text):
-                connectingView(text)
-            case .preparingGame:
-                connectingView(GameStrings.opponentFound)
-            case .playing:
-                gameView()
-            }
+    @ViewBuilder private func joinGameView(_ text: String) -> some View {
+        gameButtonView(text: text) {
+            gameManager.joinGame()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     @ViewBuilder private func connectingView(_ text: String) -> some View {
-        VStack(spacing: 0) {
-            VStack {
-                gameInfoView()
-                    .opacity(gameInfoViewOpacity)
-                Spacer()
-                if gameManager.gameState != .preparingGame {
-                    CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
-                } else {
-                    if isMinimised == false {
-                        VStack {
-                            ZStack {
-                                CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFace, degree: $cardFlipAnimator.frontDegree)
-                                CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
-                            }
-                            .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
-                            .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
+        VStack {
+            gameInfoView()
+                .opacity(gameInfoViewOpacity)
+            Spacer()
+            if gameManager.gameState != .preparingGame {
+                CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
+            } else {
+                if isMinimised == false {
+                    VStack {
+                        ZStack {
+                            CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFace, degree: $cardFlipAnimator.frontDegree)
+                            CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
                         }
+                        .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+                        .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
                     }
-                }
-                Text(text)
-                    .padding(.vertical)
-                Button(GameStrings.cancel) {
-                    gameManager.quitGame()
-                }
-                .font(GameUx.buttonFont())
-                .foregroundColor(.black)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.black, lineWidth: 1)
-                )
-                Spacer()
-            }
-            .onAppear {
-                if gameManager.gameState != .preparingGame {
-                    animateLoadingView = true
                 }
             }
-//            .onChange(of: gameManager.gameState, perform: { newValue in
-//                print("current gamestate: \(gameManager.gameState), received gamestate: \(newValue)")
-//                if gameManager.gameState == .preparingGame {
-//                    animateLoadingView = false
-//                    withAnimation(Animation.linear(duration: 0.5)) {
-//                        gameInfoViewOpacity = 1
-//                    }
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                        cardFlipAnimator.flipCard()
-//                    }
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                        withAnimation(.easeInOut) {
-//                            isMinimised.toggle()
-//                        }
-//                    }
-//                } else {
-//                    animateLoadingView = true
-//                    gameInfoViewOpacity = 0
-//                }
-//            })
-            .onReceive(gameManager.$gameState) { state in
-                print("current gamestate: \(gameManager.gameState), received gamestate: \(state)")
-
-                if state == .preparingGame {
-                    animateLoadingView = true
-                    withAnimation(Animation.linear(duration: 0.5)) {
-                        gameInfoViewOpacity = 1
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        cardFlipAnimator.flipCard()
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        withAnimation(.easeInOut) {
-//                            isMinimised.toggle()
-                            isMinimised = true
-                        }
-                    }
-                } else {
-                    animateLoadingView = true
-                    isMinimised = false
-                    cardFlipAnimator.setDefaults()
-                    gameInfoViewOpacity = 0
+            Text(text)
+                .padding(.vertical)
+            gameButtonView(text: GameStrings.cancel) {
+                gameManager.quitGame()
+            }
+            Spacer()
+        }
+        .onAppear {
+            if gameManager.gameState != .preparingGame {
+                animateLoadingView = true
+            }
+        }
+        .onReceive(gameManager.$gameState) { state in
+            print("current gamestate: \(gameManager.gameState), received gamestate: \(state)")
+            
+            if state == .preparingGame {
+                animateLoadingView = false
+                withAnimation(Animation.linear(duration: 0.5)) {
+                    gameInfoViewOpacity = 1
                 }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    cardFlipAnimator.flipCard()
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation(.easeInOut) {
+                        isMinimised = true
+                    }
+                }
+            } else {
+                animateLoadingView = true
+                isMinimised = false
+                cardFlipAnimator.setDefaults()
+                gameInfoViewOpacity = 0
             }
         }
     }
     
+    @ViewBuilder private func gameButtonView(text: String, action: @escaping () -> Void) -> some View {
+        Button(text) {
+            action()
+        }
+        .font(GameUx.buttonFont())
+        .foregroundColor(.black)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.black, lineWidth: 1)
+        )
+    }
+
     @ViewBuilder private func gameView() -> some View {
         VStack {
             GeometryReader { geometry in
@@ -197,7 +159,7 @@ struct GameView: View {
     }
     
     @ViewBuilder private func gameInfoView() -> some View {
-        HStack {
+        HStack { // TODO: Immediately animate into view and Show box with question mark inside for flipped card to merge into
             if isMinimised {
                 VStack {
                     Text(GameStrings.player1)
@@ -228,7 +190,6 @@ struct GameView: View {
             }
             .padding(.horizontal)
         }
-        .border(.green, width: 1)
         .frame(height: 100)
     }
     

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E41048132A8E286F0093F5BA /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E41048122A8E286F0093F5BA /* SocketIO */; };
-		E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41048142A8E2A040093F5BA /* SocketIOManager.swift */; };
 		E43477FA2A9CC4CC00054C0C /* Handlee-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E43477F82A9CC4CB00054C0C /* Handlee-Regular.ttf */; };
 		E43477FB2A9CC4CC00054C0C /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = E43477F92A9CC4CB00054C0C /* OFL.txt */; };
 		E44729842A9103FB00883867 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44729832A9103FB00883867 /* CardView.swift */; };
@@ -24,6 +23,7 @@
 		E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65B2A9DD04A00C58FA4 /* GameUx.swift */; };
 		E497A65E2A9DD33600C58FA4 /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65D2A9DD33600C58FA4 /* GameMode.swift */; };
 		E497A6602A9DD34B00C58FA4 /* GameFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */; };
+		E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */; };
 		E4A1C4492A9A274800116F58 /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A1C4482A9A274800116F58 /* DropView.swift */; };
 		E4A1C44B2A9A299A00116F58 /* FallingTileBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A1C44A2A9A299A00116F58 /* FallingTileBehavior.swift */; };
 		E4AD1AEF2A93188100ACF69B /* MultiPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1AEE2A93188100ACF69B /* MultiPlayerView.swift */; };
@@ -43,7 +43,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E41048142A8E2A040093F5BA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		E43477F82A9CC4CB00054C0C /* Handlee-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Handlee-Regular.ttf"; sourceTree = "<group>"; };
 		E43477F92A9CC4CB00054C0C /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		E43477FC2A9CC4ED00054C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -60,6 +59,7 @@
 		E497A65B2A9DD04A00C58FA4 /* GameUx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUx.swift; sourceTree = "<group>"; };
 		E497A65D2A9DD33600C58FA4 /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
 		E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFontConfig.swift; sourceTree = "<group>"; };
+		E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketConnectionState.swift; sourceTree = "<group>"; };
 		E4A1C4482A9A274800116F58 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		E4A1C44A2A9A299A00116F58 /* FallingTileBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingTileBehavior.swift; sourceTree = "<group>"; };
 		E4AD1AEE2A93188100ACF69B /* MultiPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPlayerView.swift; sourceTree = "<group>"; };
@@ -91,15 +91,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E41048162A8E2A330093F5BA /* SocketIO */ = {
-			isa = PBXGroup;
-			children = (
-				E41048142A8E2A040093F5BA /* SocketIOManager.swift */,
-				E497A6572A9DBC1700C58FA4 /* SocketEvents.swift */,
-			);
-			path = SocketIO;
-			sourceTree = "<group>";
-		};
 		E43477F72A9CC4CB00054C0C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +124,8 @@
 		E466B6972A91C0A80023FFC4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */,
+				E497A6572A9DBC1700C58FA4 /* SocketEvents.swift */,
 				E497A65B2A9DD04A00C58FA4 /* GameUx.swift */,
 				E497A65D2A9DD33600C58FA4 /* GameMode.swift */,
 				E4AD1B392A93610000ACF69B /* GameState.swift */,
@@ -170,7 +163,6 @@
 				E43477FC2A9CC4ED00054C0C /* Info.plist */,
 				E4AD996A2A8C8A9800909E38 /* ColorRaceApp.swift */,
 				E4AD996C2A8C8A9800909E38 /* ContentView.swift */,
-				E41048162A8E2A330093F5BA /* SocketIO */,
 				E466B6972A91C0A80023FFC4 /* Models */,
 				E44729802A9103BD00883867 /* Views */,
 				E4AD996E2A8C8A9F00909E38 /* Assets.xcassets */,
@@ -275,9 +267,9 @@
 				E4AD1B662A93937900ACF69B /* CardFaceView.swift in Sources */,
 				E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */,
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
-				E41048152A8E2A040093F5BA /* SocketIOManager.swift in Sources */,
 				E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */,
 				E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */,
+				E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */,
 				E48548C12AA2EFC6009803AD /* CardFlipAnimator.swift in Sources */,
 				E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */,
 				E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */,

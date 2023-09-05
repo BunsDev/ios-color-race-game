@@ -26,7 +26,7 @@ struct CardView: View {
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         let standardCardLayout = CardLayout(width: 200, height: 330, color: .white, cornerRadius: 15, borderWidth: 2, borderColor: .black)
-        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, type: .standard)
+//        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, type: .standard)
         let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
 //        CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .face(drawable: standardCardFace)))
         CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .back(drawable: standardCardBack)))
