@@ -93,8 +93,8 @@ class BoardView: UIView {
             confettiEmitter.emitterSize = subview.bounds.size
 
             var confettiCells = [CAEmitterCell]()
-            for color in self.tileColors {
-                confettiCells.append(self.confettiWithColor(color: color))
+            for color in tileColors {
+                confettiCells.append(confettiWithColor(color: color))
             }
 
             confettiEmitter.emitterCells = confettiCells

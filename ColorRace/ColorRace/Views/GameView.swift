@@ -71,26 +71,21 @@ struct GameView: View {
 
     @ViewBuilder private func gameHUDView() -> some View {
         HStack {
-            if showMiniCard {
-                VStack {
-                    Text(GameStrings.player1)
-                        .frame(height: 25)
+            VStack {
+                Text(GameStrings.player1)
+                    .frame(height: 25)
+                if showMiniCard {
                     ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
                         .frame(width: 60, height: 60)
                         .matchedGeometryEffect(id: "shape", in: miniCardAnimation)
-                }
-                .padding(.horizontal)
-            } else {
-                VStack {
-                    Text(GameStrings.player1)
-                        .frame(height: 25)
+                } else {
                     Text("?")
                         .foregroundColor(.black)
                         .frame(width: 60, height: 60)
                         .border(.black, width: 0.5)
                 }
-                .padding(.horizontal)
             }
+            .padding(.horizontal)
             Spacer()
             Text(GameStrings.play)
                 .frame(minWidth: 150)
@@ -102,6 +97,7 @@ struct GameView: View {
     
     // TODO: Update connecting view and connected view to have the same y-offset for the card view
     @ViewBuilder private func connectingView(_ text: String) -> some View {
+        gameHUDView().opacity(0)
         Spacer()
         CardLoadingView(cards: CardStore.loadingCards())
         connectingStatusView(text, buttonText: GameStrings.cancel) {
@@ -127,15 +123,15 @@ struct GameView: View {
             }
             connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
-            }
+            }.opacity(showMiniCard ? 0 : 1)
             Spacer()
         }
         .onAppear {
             cardFlipAnimator.setDefaults()
-            withAnimation(.linear(duration: 0.5)) { gameHUDViewOpacity = 1 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { cardFlipAnimator.flipCard() } // cardFlipAnimation lasts ~ 1s
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { withAnimation(.linear) { showMiniCard = true } }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { gameManager.preparedGame() }
+            withAnimation(.linear(duration: 0.25)) { gameHUDViewOpacity = 1 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { cardFlipAnimator.flipCard() } // cardFlipAnimation lasts ~ 0.75s
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { withAnimation(.linear) { showMiniCard = true } }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { gameManager.preparedGame() }
         }
         .onDisappear {
             showMiniCard = false
@@ -174,10 +170,7 @@ extension GameView {
                 boardRepresentableView(geometry: geometry)
             }
             .onAppear {
-                showMiniCard = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    showGameBoard = true
-                }
+                showGameBoard = true
             }
             .onDisappear {
                 showGameBoard = false
