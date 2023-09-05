@@ -15,7 +15,7 @@ struct ColorGridView: View {
     private let defaultBoardColor: Color = .white
     private let predefinedColors: [UIColor] = [.red, .blue, .orange, .yellow, .white]
     @State private var randomize: Bool = false
-    @State private var displayDefault: Bool = true
+    @State var displayDefault: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -48,6 +48,6 @@ struct ColorGridView: View {
 
 struct ColorGridView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorGridView(cardType: .small, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
+        ColorGridView(cardType: .small, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]], displayDefault: true)
     }
 }

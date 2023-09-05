@@ -1,5 +1,5 @@
 //
-//  TileGridView.swift
+//  BoardViewRepresentable.swift
 //  ColorRace
 //
 //  Created by Anup D'Souza on 27/08/23.

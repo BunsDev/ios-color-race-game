@@ -35,14 +35,14 @@ struct CardFaceView: View {
     private func fullFaceView() -> some View {
         return VStack {
             topDetailView()
-            ColorGridView(cardType: cardFace.type, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
+            ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
                 .padding()
             bottomDetailView()
         }
     }
     
     private func miniFaceView() -> some View {
-        ColorGridView(cardType: cardFace.type, colors: [[.red, .red, .red],[.blue, .blue, .blue], [.orange, .orange, .orange]])
+        ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
     }
     
     private func topDetailView() -> some View {
@@ -86,6 +86,6 @@ struct CardFaceView: View {
 
 struct CardFaceView_Previews: PreviewProvider {
     static var previews: some View {
-        CardStore.mediumCardFaceView
+        CardStore.standardCardFaceView
     }
 }

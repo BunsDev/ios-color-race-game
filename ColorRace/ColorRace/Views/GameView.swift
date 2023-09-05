@@ -12,10 +12,12 @@ struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
     @ObservedObject private var cardFlipAnimator = CardFlipAnimator()
-    @State private var gameInfoViewOpacity: Double = 0
-    @State private var isMinimised = false
-    @State private var animateLoadingView = false
-    @Namespace private var cardMinifyAnimation
+    @State private var gameHUDViewOpacity: Double = 0
+    @State private var showGameBoard = false
+    @State private var showMiniCard = false
+    @State private var isMatching = false // TODO: Tie to board view
+    @Namespace private var miniCardAnimation
+    private let hudViewHeight = 100.0
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont()]
@@ -23,12 +25,7 @@ struct GameView: View {
     
     var body: some View {
         VStack {
-            switch gameManager.gameMode {
-            case .multiPlayer:
-                multiPlayerView()
-            case .singlePlayer:
-                singlePlayerView()
-            }
+            gameView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .font(GameUx.subtitleFont())
@@ -53,16 +50,16 @@ struct GameView: View {
         .padding(.horizontal)
     }
     
-    @ViewBuilder private func multiPlayerView() -> some View {
+    @ViewBuilder private func gameView() -> some View {
         switch gameManager.gameState {
         case .disconnected(let text), .failure(let text):
             joinGameView(text)
         case .connectingToServer(let text), .connectingToOpponent(let text):
             connectingView(text)
         case .preparingGame:
-            connectingView(GameStrings.opponentFound)
+            connectedView(GameStrings.opponentFound)
         case .playing:
-            gameView()
+            boardView()
         }
     }
     
@@ -71,63 +68,86 @@ struct GameView: View {
             gameManager.joinGame()
         }
     }
-    
-    @ViewBuilder private func connectingView(_ text: String) -> some View {
-        VStack {
-            gameInfoView()
-                .opacity(gameInfoViewOpacity)
-            Spacer()
-            if gameManager.gameState != .preparingGame {
-                CardLoadingView(cards: loadingCardViews(), animate: $animateLoadingView)
+
+    @ViewBuilder private func gameHUDView() -> some View {
+        HStack {
+            if showMiniCard {
+                VStack {
+                    Text(GameStrings.player1)
+                        .frame(height: 25)
+                    ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
+                        .frame(width: 60, height: 60)
+                        .matchedGeometryEffect(id: "shape", in: miniCardAnimation)
+                }
+                .padding(.horizontal)
             } else {
-                if isMinimised == false {
-                    VStack {
-                        ZStack {
-                            CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFace, degree: $cardFlipAnimator.frontDegree)
-                            CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
-                        }
-                        .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
-                        .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
+                VStack {
+                    Text(GameStrings.player1)
+                        .frame(height: 25)
+                    Text("?")
+                        .foregroundColor(.black)
+                        .frame(width: 60, height: 60)
+                        .border(.black, width: 0.5)
+                }
+                .padding(.horizontal)
+            }
+            Spacer()
+            Text(GameStrings.play)
+                .frame(minWidth: 150)
+            Spacer()
+            player2HUDView()
+        }
+        .frame(height: hudViewHeight)
+    }
+    
+    // TODO: Update connecting view and connected view to have the same y-offset for the card view
+    @ViewBuilder private func connectingView(_ text: String) -> some View {
+        Spacer()
+        CardLoadingView(cards: CardStore.loadingCards())
+        connectingStatusView(text, buttonText: GameStrings.cancel) {
+            gameManager.quitGame()
+        }
+        Spacer()
+    }
+    
+    @ViewBuilder private func connectedView(_ text: String) -> some View {
+        VStack {
+            gameHUDView()
+                .opacity(gameHUDViewOpacity)
+            Spacer()
+            if showMiniCard == false {
+                VStack {
+                    ZStack {
+                        CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors), degree: $cardFlipAnimator.frontDegree)
+                        CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
                     }
+                    .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+                    .matchedGeometryEffect(id: "shape", in: miniCardAnimation)
                 }
             }
-            Text(text)
-                .padding(.vertical)
-            gameButtonView(text: GameStrings.cancel) {
+            connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
             }
             Spacer()
         }
         .onAppear {
-            if gameManager.gameState != .preparingGame {
-                animateLoadingView = true
-            }
+            cardFlipAnimator.setDefaults()
+            withAnimation(.linear(duration: 0.5)) { gameHUDViewOpacity = 1 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { cardFlipAnimator.flipCard() } // cardFlipAnimation lasts ~ 1s
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { withAnimation(.linear) { showMiniCard = true } }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { gameManager.preparedGame() }
         }
-        .onReceive(gameManager.$gameState) { state in
-            print("current gamestate: \(gameManager.gameState), received gamestate: \(state)")
-            
-            if state == .preparingGame {
-                animateLoadingView = false
-                withAnimation(Animation.linear(duration: 0.5)) {
-                    gameInfoViewOpacity = 1
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    cardFlipAnimator.flipCard()
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    withAnimation(.easeInOut) {
-                        isMinimised = true
-                    }
-                }
-            } else {
-                animateLoadingView = true
-                isMinimised = false
-                cardFlipAnimator.setDefaults()
-                gameInfoViewOpacity = 0
-            }
+        .onDisappear {
+            showMiniCard = false
+            gameHUDViewOpacity = 0
+            cardFlipAnimator.setDefaults()
         }
+    }
+    
+    @ViewBuilder private func connectingStatusView(_ statusText: String, buttonText: String, action: @escaping () -> Void) -> some View {
+        Text(statusText)
+            .padding(.vertical)
+        gameButtonView(text: buttonText, action: action)
     }
     
     @ViewBuilder private func gameButtonView(text: String, action: @escaping () -> Void) -> some View {
@@ -142,73 +162,81 @@ struct GameView: View {
                 .stroke(Color.black, lineWidth: 1)
         )
     }
+}
 
-    @ViewBuilder private func gameView() -> some View {
+// MARK: - Board
+extension GameView {
+    
+    @ViewBuilder private func boardView() -> some View {
         VStack {
             GeometryReader { geometry in
-                gameInfoView()
-                VStack {
-                    BoardViewRepresentable(isMatching: .constant(true), boardColors: $gameManager.boardColors)
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .border(.red, width: 1)
+                boardHUDView()
+                boardRepresentableView(geometry: geometry)
+            }
+            .onAppear {
+                showMiniCard = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showGameBoard = true
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            .onDisappear {
+                showGameBoard = false
             }
         }
         .clipped()
     }
     
-    @ViewBuilder private func gameInfoView() -> some View {
-        HStack { // TODO: Immediately animate into view and Show box with question mark inside for flipped card to merge into
-            if isMinimised {
-                VStack {
-                    Text(GameStrings.player1)
-                        .frame(height: 25)
-                    ColorGridView(cardType: .small, colors: gameManager.boardColors)
-                        .frame(width: 60, height: 60)
-                        .matchedGeometryEffect(id: "shape", in: cardMinifyAnimation)
-                }
-                .padding(.horizontal)
-            } else {
-                VStack {
-                    Text(GameStrings.player1)
-                        .frame(height: 25)
-                    ColorGridView(cardType: .small, colors: gameManager.boardColors)
-                        .frame(width: 60, height: 60)
-                }
-                .padding(.horizontal)
-            }
+    @ViewBuilder private func boardRepresentableView(geometry: GeometryProxy) -> some View {
+        VStack {
+            BoardViewRepresentable(isMatching: .constant(true), boardColors: $gameManager.boardColors)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+        }
+        .frame(width: geometry.size.width, height: geometry.size.height)
+        .offset(y: showGameBoard ? 0 : geometry.size.height)
+        .transition(.slide)
+        .animation(.spring(dampingFraction: 0.6), value: showGameBoard)
+        .clipped()
+    }
+}
+
+// MARK: - HUD's
+extension GameView {
+    
+    @ViewBuilder private func boardHUDView() -> some View {
+        HStack {
+            player1HUDView()
             Spacer()
-            Text(GameStrings.go)
+            Text(GameStrings.play)
                 .frame(minWidth: 150)
             Spacer()
-            VStack {
-                Text(GameStrings.player2)
-                    .frame(height: 25)
-                ColorGridView(cardType: .small, colors: CardStore.defaultBoardColors)
-                    .frame(width: 60, height: 60)
-            }
-            .padding(.horizontal)
+            player2HUDView()
         }
-        .frame(height: 100)
+        .frame(height: hudViewHeight)
     }
     
-    @ViewBuilder private func singlePlayerView() -> some View {
-        Text(GameStrings.comingSoon)
-            .font(GameUx.buttonFont())
+    @ViewBuilder private func player1HUDView() -> some View {
+        VStack {
+            Text(GameStrings.player1)
+                .frame(height: 25)
+            ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
+                .frame(width: 60, height: 60)
+                .matchedGeometryEffect(id: "shape", in: miniCardAnimation)
+        }
+        .padding(.horizontal)
+    }
+    
+    @ViewBuilder private func player2HUDView() -> some View {
+        VStack {
+            Text(GameStrings.player2)
+                .frame(height: 25)
+            ColorGridView(cardType: .small, colors: CardStore.defaultBoardColors, displayDefault: true)
+                .frame(width: 60, height: 60)
+        }
+        .padding(.horizontal)
     }
 }
 
-extension GameView {
-    func loadingCardViews() -> [AnyView] {
-        [
-            AnyView(CardStore.mediumCardBackView),
-            AnyView(CardStore.mediumCardBackView),
-            AnyView(CardStore.mediumCardBackView)
-        ]
-    }
-}
-
+// MARK: - PreviewProvider
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()

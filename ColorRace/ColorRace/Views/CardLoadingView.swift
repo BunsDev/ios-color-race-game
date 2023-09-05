@@ -5,11 +5,9 @@
 //  Created by Anup D'Souza on 19/08/23.
 //
 
-
 import SwiftUI
 
-// TODO: Enhancemente
-// 1. Calculate correct rotation degrees for varying number of cards
+// TODO: Calculate correct rotation degrees for varying number of cards
 extension Animation {
     func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
         if expression {
@@ -23,8 +21,8 @@ extension Animation {
 /// An animate card loading view that displays a stack of cards that fan out
 struct CardLoadingView: View {
     @State var cards: [AnyView]
-    @Binding var animate: Bool
-
+    @State var animate = false
+    
     var body: some View {
         ZStack {
             ForEach(0..<cards.count, id: \.self) { index in
@@ -34,8 +32,17 @@ struct CardLoadingView: View {
                     .animation(Animation.easeInOut(duration: 1).delay(0.25).repeat(while: animate), value: animate)
             }
         }
+        .onAppear() {
+            startAnimation()
+        }
     }
-
+    
+    func startAnimation() {
+        withAnimation(Animation.linear(duration: 0.75).delay(0.25).repeatForever(autoreverses: true)) {
+            animate.toggle()
+        }
+    }
+    
     private func midIndex() -> Int {
         return cards.count / 2
     }
@@ -44,7 +51,7 @@ struct CardLoadingView: View {
 struct CardContainerView_Previews: PreviewProvider {
     static var previews: some View {
         let standardCardLayout = CardLayout(width: 200, height: 330, color: .white, cornerRadius: 15, borderWidth: 2, borderColor: .black)
-        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, type: .standard)
+        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, colors: CardStore.defaultBoardColors, type: .standard)
         let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
         let cardFaceView = CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .face(drawable: standardCardFace)))
         let cardBackView = CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .back(drawable: standardCardBack)))
@@ -55,6 +62,6 @@ struct CardContainerView_Previews: PreviewProvider {
             AnyView(cardBackView),
             AnyView(cardBackView)
         ]
-        CardLoadingView(cards: cards, animate: .constant(true))
+        CardLoadingView(cards: cards)
     }
 }

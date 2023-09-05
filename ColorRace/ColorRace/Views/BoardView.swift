@@ -10,7 +10,7 @@ import UIKit
 
 class BoardView: UIView {
     
-    private let dropBehavior = FallingTileBehavior()
+    private let dropBehavior = FallingObjectBehavior()
     private lazy var animator: UIDynamicAnimator = UIDynamicAnimator(referenceView: self)
     
     private let tilesPerRow = 3
@@ -33,8 +33,6 @@ class BoardView: UIView {
         didSet {
             if animating {
                 animator.addBehavior(dropBehavior)
-                //shrinkAndDropTiles()
-                //explodeTiles()
             } else {
                 animator.removeBehavior(dropBehavior)
             }
@@ -46,8 +44,8 @@ class BoardView: UIView {
     }
     
     func addTiles() {
-        generateRandomboardColors()
-        tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow), height: tileSize.height * CGFloat(tilesPerRow)))
+        tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow),
+                                                                     height: tileSize.height * CGFloat(tilesPerRow)))
         for row in 0..<tilesPerRow {
             for col in 0..<tilesPerRow {
                 let frame = CGRect(
@@ -56,8 +54,8 @@ class BoardView: UIView {
                     width: tileSize.width,
                     height: tileSize.height
                 )
-                let tileView = TileView(frame: frame, colors: tileColors, delegate: self)
-                tileView.backgroundColor = .white//tileColors.randomElement() // TODO: remove
+                let tileView = BoardTileView(frame: frame, colors: tileColors, delegate: self)
+                tileView.backgroundColor = .white
                 tileContainerView.addSubview(tileView)
             }
         }
@@ -65,17 +63,9 @@ class BoardView: UIView {
         tileContainerView.center = self.center
     }
     
-    private func generateRandomboardColors() {
-//        boardColors = (0..<tilesPerRow).map { _ in
-//            return (0..<tilesPerRow).map { _ in
-//                return tileColors.randomElement() ?? .white
-//            }
-//        }
-        print(boardColors)
-    }
-    
-    private func shrinkAndDropTiles() {
+    private func showLosingAnimation() {
         for subview in tileContainerView.subviews {
+
             UIView.animate(withDuration: .random(in: 0...0.5)) {
 
                 let originalCenter = CGPoint(x: subview.frame.midX, y: subview.frame.midY)
@@ -94,27 +84,27 @@ class BoardView: UIView {
         }
     }
     
-    private func explodeTiles() {
+    private func showWinningAnimation() {
         for subview in tileContainerView.subviews {
 
-            let explosionEmitter = CAEmitterLayer()
-            explosionEmitter.emitterShape = .rectangle
-            explosionEmitter.emitterPosition = subview.center
-            explosionEmitter.emitterSize = subview.bounds.size
+            let confettiEmitter = CAEmitterLayer()
+            confettiEmitter.emitterShape = .rectangle
+            confettiEmitter.emitterPosition = subview.center
+            confettiEmitter.emitterSize = subview.bounds.size
 
-            var cells = [CAEmitterCell]()
+            var confettiCells = [CAEmitterCell]()
             for color in self.tileColors {
-                cells.append(self.confettiWithColor(color: color))
+                confettiCells.append(self.confettiWithColor(color: color))
             }
 
-            explosionEmitter.emitterCells = cells
-            subview.layer.addSublayer(explosionEmitter)
+            confettiEmitter.emitterCells = confettiCells
+            subview.layer.addSublayer(confettiEmitter)
 
             UIView.animate(withDuration: .random(in: 0...1)) {
                  subview.alpha = 0
             } completion: { _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    explosionEmitter.removeFromSuperlayer()
+                    confettiEmitter.removeFromSuperlayer()
                 }
             }
         }
@@ -137,8 +127,8 @@ class BoardView: UIView {
     }
 }
 
-extension BoardView: TileViewDelegate {
-    func tileView(_ tileView: TileView, didSelectColor color: UIColor) {
+extension BoardView: BoardTileViewDelegate {
+    func boardTileView(_ tileView: BoardTileView, didSelectColor color: UIColor) {
         let tileIndex = tileContainerView.subviews.firstIndex(of: tileView)
         guard let index = tileIndex else { return }
 
@@ -153,22 +143,10 @@ extension BoardView: TileViewDelegate {
             }
 
             if allMatch {
-                print("WON!")
-//                explodeTiles()
-                shrinkAndDropTiles()
+                showWinningAnimation()
+                // TODO: Notify GameView of winning event
+                // TODO: Be notified of losing event
             }
         }
-    }
-}
-
-extension UIImage {
-    static func imageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
-        let rect = CGRect(origin: .zero, size: size)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        color.setFill()
-        UIRectFill(rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return image
     }
 }
