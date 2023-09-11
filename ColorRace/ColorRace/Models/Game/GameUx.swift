@@ -27,9 +27,10 @@ internal struct GameUx {
     }
 
     static func navigationFont() -> UIFont {
-        guard let font = UIFont(name: GameFontConfig.font, size: GameFontConfig.subtitleFontSize) else {
-            return .systemFont(ofSize: GameFontConfig.subtitleFontSize)
-        }
-        return font
+        return .systemFont(ofSize: GameFontConfig.subtitleFontSize)
+//        guard let font = UIFont(name: GameFontConfig.font, size: GameFontConfig.subtitleFontSize) else {
+//            return .systemFont(ofSize: GameFontConfig.subtitleFontSize)
+//        }
+//        return font
     }
 }

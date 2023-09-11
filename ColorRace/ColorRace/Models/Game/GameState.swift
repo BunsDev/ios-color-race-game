@@ -14,4 +14,6 @@ internal enum GameState: Equatable {
     case failure(errorText: String)
     case preparingGame
     case playing
+    case userWon
+    case userLost
 }

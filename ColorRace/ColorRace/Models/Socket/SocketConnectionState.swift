@@ -16,4 +16,5 @@ internal enum SocketConnectionState {
     case opponentDisconnected
     case gameStarted
     case connectingToServer
+    case userLost
 }

@@ -12,4 +12,6 @@ internal struct SocketEvents {
     static let userJoined = "userJoined"
     static let gameStarted = "gameStarted"
     static let userDisconnected = "userDisconnected"
+    static let disconnectNamespace = "disconnectNamespace"
+    static let userWon = "userWon"
 }

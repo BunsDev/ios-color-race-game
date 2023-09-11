@@ -25,6 +25,9 @@
 		E497A6602A9DD34B00C58FA4 /* GameFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */; };
 		E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */; };
 		E4A1C44B2A9A299A00116F58 /* FallingObjectBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A1C44A2A9A299A00116F58 /* FallingObjectBehavior.swift */; };
+		E4AA22A02AADB4A0006A1C99 /* BlurBackdropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AA229F2AADB4A0006A1C99 /* BlurBackdropView.swift */; };
+		E4AA22A22AADB54C006A1C99 /* View+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AA22A12AADB54C006A1C99 /* View+Blur.swift */; };
+		E4AA22A42AADB70C006A1C99 /* UIView+Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AA22A32AADB70C006A1C99 /* UIView+Tap.swift */; };
 		E4AC1A1D2AAAD8A30017FCC1 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AC1A1C2AAAD8A30017FCC1 /* ConfettiView.swift */; };
 		E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B392A93610000ACF69B /* GameState.swift */; };
 		E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B612A9388AE00ACF69B /* GameStrings.swift */; };
@@ -58,6 +61,9 @@
 		E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFontConfig.swift; sourceTree = "<group>"; };
 		E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketConnectionState.swift; sourceTree = "<group>"; };
 		E4A1C44A2A9A299A00116F58 /* FallingObjectBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingObjectBehavior.swift; sourceTree = "<group>"; };
+		E4AA229F2AADB4A0006A1C99 /* BlurBackdropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurBackdropView.swift; sourceTree = "<group>"; };
+		E4AA22A12AADB54C006A1C99 /* View+Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Blur.swift"; sourceTree = "<group>"; };
+		E4AA22A32AADB70C006A1C99 /* UIView+Tap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Tap.swift"; sourceTree = "<group>"; };
 		E4AC1A1C2AAAD8A30017FCC1 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		E4AD1B392A93610000ACF69B /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		E4AD1B612A9388AE00ACF69B /* GameStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStrings.swift; sourceTree = "<group>"; };
@@ -143,6 +149,9 @@
 			isa = PBXGroup;
 			children = (
 				E48ED2392AA728AE00070908 /* UIImage+Color.swift */,
+				E4AA229F2AADB4A0006A1C99 /* BlurBackdropView.swift */,
+				E4AA22A12AADB54C006A1C99 /* View+Blur.swift */,
+				E4AA22A32AADB70C006A1C99 /* UIView+Tap.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -308,13 +317,16 @@
 				E46639832A946DB200532E7B /* ColorGridView.swift in Sources */,
 				E4FE5F952A91DFD100A860DC /* StartView.swift in Sources */,
 				E497A6582A9DBC1700C58FA4 /* SocketEvents.swift in Sources */,
+				E4AA22A22AADB54C006A1C99 /* View+Blur.swift in Sources */,
 				E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */,
 				E44729862A91049800883867 /* CardLoadingView.swift in Sources */,
 				E4A1C44B2A9A299A00116F58 /* FallingObjectBehavior.swift in Sources */,
 				E4AD1B662A93937900ACF69B /* CardFaceView.swift in Sources */,
+				E4AA22A02AADB4A0006A1C99 /* BlurBackdropView.swift in Sources */,
 				E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */,
 				E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */,
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
+				E4AA22A42AADB70C006A1C99 /* UIView+Tap.swift in Sources */,
 				E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */,
 				E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */,
 				E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */,

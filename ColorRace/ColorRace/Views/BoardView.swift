@@ -8,8 +8,12 @@
 import Foundation
 import UIKit
 
+protocol BoardViewDelegate: AnyObject {
+    func userWon()
+}
+
 class BoardView: UIView {
-    
+    weak var delegate: BoardViewDelegate?
     private let dropBehavior = FallingObjectBehavior()
     private lazy var animator: UIDynamicAnimator = UIDynamicAnimator(referenceView: self)
     
@@ -44,18 +48,18 @@ class BoardView: UIView {
     }
     
     func addTiles() {
-        tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow),
-                                                                     height: tileSize.height * CGFloat(tilesPerRow)))
+        let tileSpacing: CGFloat = 10.0 // Adjust this value to control the spacing between tiles
+        tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow) + tileSpacing * CGFloat(tilesPerRow - 1),
+                                                                     height: tileSize.height * CGFloat(tilesPerRow) + tileSpacing * CGFloat(tilesPerRow - 1)))
         for row in 0..<tilesPerRow {
             for col in 0..<tilesPerRow {
                 let frame = CGRect(
-                    x: CGFloat(col) * tileSize.width,
-                    y: CGFloat(row) * tileSize.width,
+                    x: CGFloat(col) * (tileSize.width + tileSpacing),
+                    y: CGFloat(row) * (tileSize.height + tileSpacing),
                     width: tileSize.width,
                     height: tileSize.height
                 )
                 let tileView = BoardTileView(frame: frame, colors: tileColors, delegate: self)
-                tileView.backgroundColor = .white
                 tileContainerView.addSubview(tileView)
             }
         }
@@ -110,7 +114,7 @@ class BoardView: UIView {
 }
 
 extension BoardView: BoardTileViewDelegate {
-    func boardTileView(_ tileView: BoardTileView, didSelectColor color: UIColor) {
+    func boardTileView(_ tileView: UIView, didSelectColor color: UIColor) {
         let tileIndex = tileContainerView.subviews.firstIndex(of: tileView)
         guard let index = tileIndex else { return }
 
@@ -118,6 +122,7 @@ extension BoardView: BoardTileViewDelegate {
         let col = index % tilesPerRow
 
         if boardColors[row][col] == color {
+            // TODO: update to get the currentcolor from tile view
             let allMatch = tileContainerView.subviews.enumerated().allSatisfy { (index, subview) in
                 let row = index / tilesPerRow
                 let col = index % tilesPerRow
@@ -126,7 +131,9 @@ extension BoardView: BoardTileViewDelegate {
 
             if allMatch {
                 showWinningAnimation()
-                // TODO: Notify GameView of winning event
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in // allow for animation to complete
+                    self?.delegate?.userWon()
+                }
                 // TODO: Be notified of losing event
             }
         }

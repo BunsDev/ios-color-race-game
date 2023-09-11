@@ -19,5 +19,8 @@ internal struct GameStrings {
     static let play = "Play !"
     static let player1 = "You"
     static let player2 = "Player 2"
+    static let userWon = "Victory !\nYou were faster than Player 2"
+    static let userLost = "You Lost :(\nIt's okay, you still get a medal."
+    static let nextRound = "Next round starts in "
 }
 

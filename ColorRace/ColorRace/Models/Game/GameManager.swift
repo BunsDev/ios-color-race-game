@@ -10,10 +10,13 @@ import SwiftUI
 import Combine
 import SocketIO
 
+// TODO: disconnect user on backgrounding the app
 final class GameManager: ObservableObject {
     /// Game management
     @Published private(set) var gameState: GameState
     private var cancellable: AnyCancellable?
+    @Published private(set) var secondsToNextRound: Int = 3
+    var timer = Timer()
     
     /// SocketManager
     private var socketManager: SocketManager?
@@ -63,6 +66,41 @@ extension GameManager {
         gameState = .playing
     }
 
+    func userWonGame() {
+//        gameState = .userWon
+//        userWonOnConnection()
+//        startNextRoundTimer()
+    }
+
+    func userLostGame() {
+        gameState = .userLost
+        startNextRoundTimer()
+    }
+
+    private func startNextRoundTimer() {
+        secondsToNextRound = 3
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateNextRoundTimer), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func updateNextRoundTimer() {
+        guard secondsToNextRound > 0 else {
+            stopNextRoundTimer()
+            loadNextRound()
+            return
+        }
+        
+        secondsToNextRound -= 1
+    }
+
+    private func stopNextRoundTimer() {
+        timer.invalidate()
+    }
+    
+    private func loadNextRound() {
+        setupBoard()
+        gameState = .preparingGame
+    }
+   
     private func setupBoard() {
         generateRandomBoardColors()
     }
@@ -94,6 +132,10 @@ extension GameManager {
 
         case .connectingToServer:
             gameState = .connectingToServer(connectionText: GameStrings.connectingToServer)
+        
+        case .userLost:
+            gameState = .userLost
+//            userLostGame()
         }
     }
 }
@@ -156,6 +198,21 @@ extension GameManager {
                 self?.socketState = .opponentDisconnected
             }
         }
+        
+        socket?.on(SocketEvents.userWon) { [weak self] data, _ in
+            guard let data = data.first as? String else {
+                print("client => received event: \(SocketEvents.userWon), failed to read namespace")
+                return
+            }
+            
+            if let socketId = self?.socket?.sid, socketId == data {
+                print("client => received event: \(SocketEvents.userWon), socket id(self):\(data)")
+                // do nothing
+            } else {
+                print("client => received event: \(SocketEvents.userWon), socket id(other):\(data)")
+                self?.socketState = .userLost
+            }
+        }
 
     }
 
@@ -171,7 +228,15 @@ extension GameManager {
             socket?.disconnect()
             return
         }
-        socket?.emit("disconnectNamespace", namespace)
+        socket?.emit(SocketEvents.disconnectNamespace, namespace)
         socket?.disconnect()
+    }
+
+    private func userWonOnConnection() {
+        guard let namespace = namespace else {
+            socket?.disconnect()
+            return
+        }
+        socket?.emit(SocketEvents.userWon, namespace)
     }
 }
