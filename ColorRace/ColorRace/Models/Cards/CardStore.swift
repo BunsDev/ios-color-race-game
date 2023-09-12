@@ -19,7 +19,7 @@ struct CardStore {
     static let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
     static let standardCardBackView = CardBackView(cardLayout: standardCardLayout, cardBack: standardCardBack, degree: .constant(0))
     
-    static let mediumCardFace = CardFace(letter: "A", suit: "♠️", fontSize: 10, colors: defaultBoardColors, type: .medium)
+    static let mediumCardFace = CardFace(letter: "A", suit: "♠️", fontSize: 10, colors: defaultBoardColors, type: .small)
     static let mediumCardFaceView = CardFaceView(cardLayout: mediumCardLayout, cardFace: mediumCardFace, degree: .constant(0))
     
     static let standardCardFace = CardFace(letter: "A", suit: "♣️", fontSize: 20, colors: defaultBoardColors, type: .standard)

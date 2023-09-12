@@ -11,82 +11,71 @@ struct CardFaceView: View {
     @State var cardLayout: CardLayout
     @State var cardFace: CardFaceDrawable
     @Binding var degree: Double
+    private let colorGridWidth = 40.0
+    private let colorGridHeight = 40.0
     
     var body: some View {
         GeometryReader { geometry in
-            if cardFace.type == .small {
-                miniFaceView()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .border(cardLayout.borderColor, width: cardLayout.borderWidth)
-            } else {
-                fullFaceView()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .background(cardLayout.color)
-                    .cornerRadius(cardLayout.cornerRadius)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
-                            .stroke(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
+                    .strokeBorder(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
+                    .background(
+                        RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(cardLayout.color)
                     )
-                    .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))
+                    .frame(width: cardLayout.width, height: cardLayout.height)
+                    .overlay(alignment: .topLeading) {
+                        topDetailView()
+                    }
+                    .overlay(alignment: .bottomTrailing) {
+                        bottomDetailView()
+                    }
+                    .overlay(alignment: .center) {
+                        ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
+                            .frame(width: colorGridWidth, height: colorGridHeight)
+                    }
             }
         }
+        .frame(width: cardLayout.width, height: cardLayout.height)
+        .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))
     }
     
-    private func fullFaceView() -> some View {
-        return VStack {
-            topDetailView()
-            ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
-                .padding()
-                .clipped()
-            bottomDetailView()
-        }
-    }
-    
-    private func miniFaceView() -> some View {
-        ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
-    }
-    
-    private func topDetailView() -> some View {
-        return HStack {
-            rankView(rank: cardFace.letter, symbol: cardFace.suit)
-            Spacer()
-        }
+    @ViewBuilder private func topDetailView() -> some View {
+        rankView(rank: cardFace.letter, symbol: cardFace.suit)
     }
 
-    private func bottomDetailView() -> some View {
-        return HStack {
-            Spacer()
-            rankView(rank: cardFace.letter, symbol: cardFace.suit, rotated: true)
-        }
+    @ViewBuilder private func bottomDetailView() -> some View {
+        rankView(rank: cardFace.letter, symbol: cardFace.suit, rotated: true)
+
     }
     
-    private func rankView(rank: String, symbol: String,  rotated: Bool = false) -> some View {
-        return HStack {
+    @ViewBuilder private func rankView(rank: String, symbol: String,  rotated: Bool = false) -> some View {
+        HStack {
             if rotated {
                 VStack {
                     Text(symbol)
-                        .font(.system(size: cardFace.fontSize))
+                        .font(GameUx.fontWithSize(8))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                     Text(rank)
-                        .font(.system(size: cardFace.fontSize))
+                        .font(GameUx.fontWithSize(15))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
-                }.padding(0)
+                }.padding(5)
             } else {
                 VStack {
                     Text(rank)
-                        .font(.system(size: cardFace.fontSize))
+                        .font(GameUx.fontWithSize(15))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                     Text(symbol)
-                        .font(.system(size: cardFace.fontSize))
+                        .font(GameUx.fontWithSize(8))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
-                }.padding(0)
+                }.padding(5)
             }
-        }.padding(0)
+        }
     }
 }
 
 struct CardFaceView_Previews: PreviewProvider {
     static var previews: some View {
-        CardStore.standardCardFaceView
+        CardStore.mediumCardFaceView
     }
 }
