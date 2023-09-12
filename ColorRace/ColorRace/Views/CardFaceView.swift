@@ -37,6 +37,7 @@ struct CardFaceView: View {
             topDetailView()
             ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
                 .padding()
+                .clipped()
             bottomDetailView()
         }
     }

@@ -23,14 +23,13 @@ struct CardBackView: View {
                         RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
                             .strokeBorder(cardBack.innerBorderColor, lineWidth: cardLayout.borderWidth)
                             .background(RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(Color.clear))
-                            .overlay(
-                                Text(cardBack.text)
-                                    .foregroundColor(cardBack.textColor)
-                                    .multilineTextAlignment(.center)
-                                    .font(cardBack.font)
-                            )
-                            .padding()
+                            .padding(10)
                     )
+                    .overlay(
+                        DiamondPatternView(rows: 21, cols: 7, color: cardBack.innerBorderColor)
+                            .padding(15)
+                    )
+                                
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))
@@ -40,6 +39,6 @@ struct CardBackView: View {
 
 struct CardBackView_Previews: PreviewProvider {
     static var previews: some View {
-        CardStore.standardCardBackView
+        CardStore.mediumCardBackView
     }
 }

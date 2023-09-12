@@ -46,10 +46,10 @@ class BoardTileView: UIView {
             shadowLayer = CAShapeLayer()
             shadowLayer.path = UIBezierPath(roundedRect: tileShadowView.bounds, cornerRadius: cornerRadius).cgPath
             shadowLayer.fillColor = UIColor.white.cgColor
-            shadowLayer.shadowColor = UIColor.white.cgColor
+            shadowLayer.shadowColor = UIColor.black.cgColor
             shadowLayer.shadowPath = shadowLayer.path
             shadowLayer.shadowOffset = CGSize(width: 0.0, height: 5.0)
-            shadowLayer.shadowOpacity = 0.5
+            shadowLayer.shadowOpacity = 0.3
             shadowLayer.shadowRadius = 5
             tileShadowView.layer.addSublayer(shadowLayer)
         }
@@ -74,7 +74,7 @@ class BoardTileView: UIView {
         
         delegate?.boardTileView(tileView, didSelectColor: colors[colorIndex])
         
-        self.showAnimation {}
+        //self.showAnimation {}
     }
     
     private func setBackground(_ color: UIColor) {
@@ -87,12 +87,7 @@ class BoardTileView: UIView {
         gradientLayer = CAGradientLayer()
         gradientLayer.frame = tileView.bounds
         
-        if currentColor == UIColor.white {
-            gradientLayer.colors = [
-                UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0).cgColor,
-                UIColor(red: 249/255, green: 249/255, blue: 255/255, alpha: 1.0).cgColor
-            ]
-        } else if currentColor == UIColor.blue {
+        if currentColor == UIColor.blue {
             gradientLayer.colors = [
                 UIColor(red: 47/255, green: 128/255, blue: 237/255, alpha: 1.0).cgColor,
                 UIColor(red: 77/255, green: 85/255, blue: 240/255, alpha: 1.0).cgColor
@@ -116,6 +111,11 @@ class BoardTileView: UIView {
             gradientLayer.colors = [
                 UIColor(red: 221/255, green: 113/255, blue: 130/255, alpha: 1.0).cgColor,
                 UIColor(red: 235/255, green: 87/255, blue: 87/255, alpha: 1.0).cgColor
+            ]
+        } else { // white
+            gradientLayer.colors = [
+                UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0).cgColor,
+                UIColor(red: 249/255, green: 249/255, blue: 255/255, alpha: 1.0).cgColor
             ]
         }
 

@@ -19,39 +19,29 @@ struct GameView: View {
     @Namespace private var miniCardAnimation
     private let hudViewHeight = 100.0
     
-    // background 1    
-//    [
-//        Color(uiColor: UIColor(red: 22/255, green: 15/255, blue: 62/255, alpha: 1.0)),
-//        Color(uiColor: UIColor(red: 48/255, green: 18/255, blue: 80/255, alpha: 1.0)),
-//        Color(uiColor: UIColor(red: 23/255, green: 16/255, blue: 64/255, alpha: 1.0)),
-//        Color(uiColor: UIColor(red: 17/255, green: 9/255, blue: 52/255, alpha: 1.0))
-//    ]
     init() {
-        UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: UIColor.black]
     }
     
     var body: some View {
         ZStack {
+            // MARK: Game Container
             gameView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            LinearGradient(gradient: Gradient(colors:                                   [
-                Color(uiColor: UIColor(red: 48/255, green: 18/255, blue: 80/255, alpha: 1.0)),
-                Color(uiColor: UIColor(red: 23/255, green: 16/255, blue: 64/255, alpha: 1.0)),
-                Color(uiColor: UIColor(red: 42/255, green: 16/255, blue: 72/255, alpha: 1.0))
-            ]), startPoint: .top, endPoint: .bottom)
-            )
-        .border(.black, width: 1.0)
+            // GameUx.gradientBackground()
+            Color(uiColor: UIColor(red: 245/255, green: 245/255, blue: 248/255, alpha: 1.0))
+        )
+        //.border(.black, width: 1.0)
         .font(GameUx.subtitleFont())
-            .navigationBarTitle(GameStrings.title)
+        .navigationBarTitle(GameStrings.title)
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 navigationToolbarCloseButton()
             }
         }
-        .backgroundBlur(radius: 25, opaque: false)
         .onDisappear {
             gameManager.quitGame()
         }
@@ -62,7 +52,7 @@ struct GameView: View {
             self.presentation.wrappedValue.dismiss()
         }
         .font(GameUx.buttonFont())
-        .foregroundColor(.white)
+        .foregroundColor(.black)
         .padding(.horizontal)
     }
     
@@ -98,8 +88,8 @@ struct GameView: View {
                 gameManager.quitGame()
             }
         }.onAppear {
-//            DispatchQueue.main.asyncAfter(deadline: .now()) { withAnimation(.linear) { showMiniCard = true } }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { gameManager.preparedGame() }
+            //            DispatchQueue.main.asyncAfter(deadline: .now()) { withAnimation(.linear) { showMiniCard = true } }
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { gameManager.preparedGame() }
         }
     }
     
@@ -116,6 +106,7 @@ struct GameView: View {
                     .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
                     .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
                 }
+                .transition(.scale(scale: 1))
             }
             connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
@@ -142,7 +133,7 @@ struct GameView: View {
             .multilineTextAlignment(.center)
         gameButtonView(text: buttonText, action: action)
     }
-
+    
     @ViewBuilder private func userWonView() -> some View {
         VStack {
             Image(systemName: "trophy.circle.fill")
@@ -156,7 +147,7 @@ struct GameView: View {
                 .multilineTextAlignment(.center)
         }
     }
-
+    
     @ViewBuilder private func userLostView() -> some View {
         VStack {
             Image(systemName: "medal.fill")
@@ -224,7 +215,7 @@ extension GameView {
 
 // MARK: - HUD's
 extension GameView {
-
+    
     @ViewBuilder private func animatingHUDView() -> some View {
         GeometryReader { geometry in
             HStack {
@@ -236,12 +227,11 @@ extension GameView {
                             .frame(width: 60, height: 60)
                             .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
                     } else {
-                        Text("?")
-                            .foregroundColor(.black)
+                        ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: true)
                             .frame(width: 60, height: 60)
-                            .border(.black, width: 0.5)
                     }
                 }
+                .transition(.scale(scale: 1))
                 .padding(.horizontal)
                 Spacer()
                 Text(GameStrings.play)
@@ -272,7 +262,6 @@ extension GameView {
                 .frame(height: 25)
             ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
                 .frame(width: 60, height: 60)
-                .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
         }
         .padding(.horizontal)
     }
