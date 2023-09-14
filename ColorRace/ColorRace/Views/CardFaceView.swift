@@ -46,31 +46,31 @@ struct CardFaceView: View {
 
     @ViewBuilder private func bottomDetailView() -> some View {
         rankView(rank: cardFace.letter, symbol: cardFace.suit, rotated: true)
-
     }
     
     @ViewBuilder private func rankView(rank: String, symbol: String,  rotated: Bool = false) -> some View {
         HStack {
             if rotated {
                 VStack {
-                    Text(symbol)
-                        .font(GameUx.fontWithSize(8))
+                    Image(systemName: symbol)
+                        .font(GameUx.fontWithSize(10))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                     Text(rank)
-                        .font(GameUx.fontWithSize(15))
+                        .font(GameUx.fontWithSize(20))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                 }.padding(5)
             } else {
                 VStack {
                     Text(rank)
-                        .font(GameUx.fontWithSize(15))
+                        .font(GameUx.fontWithSize(20))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
-                    Text(symbol)
-                        .font(GameUx.fontWithSize(8))
+                    Image(systemName: symbol)
+                        .font(GameUx.fontWithSize(10))
                         .rotationEffect(.degrees(rotated ? 180 : 0))
                 }.padding(5)
             }
         }
+        .foregroundColor(.black)
     }
 }
 

@@ -20,20 +20,22 @@ struct GameView: View {
     private let hudViewHeight = 100.0
     
     init() {
-        UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: UIColor.black]
+        UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: GameUx.brandUIColor()]
     }
     
     var body: some View {
         ZStack {
             // MARK: Game Container
             gameView()
+            
+//            boardView()
+                
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            // GameUx.gradientBackground()
-            Color(uiColor: UIColor(red: 245/255, green: 245/255, blue: 248/255, alpha: 1.0))
+//            GameUx.background()
+            BackgroundView()
         )
-        //.border(.black, width: 1.0)
         .font(GameUx.subtitleFont())
         .navigationBarTitle(GameStrings.title)
         .navigationBarBackButtonHidden()
@@ -48,12 +50,13 @@ struct GameView: View {
     }
     
     @ViewBuilder private func navigationToolbarCloseButton() -> some View {
-        Button(GameStrings.close) {
+        Button {
             self.presentation.wrappedValue.dismiss()
+        } label: {
+            Image(systemName: "arrowshape.turn.up.backward.fill")
+                .foregroundColor(GameUx.brandColor())
         }
-        .font(GameUx.buttonFont())
-        .foregroundColor(.black)
-        .padding(.horizontal)
+//        .foregroundColor(.black)
     }
     
     @ViewBuilder private func gameView() -> some View {
@@ -95,6 +98,7 @@ struct GameView: View {
     
     @ViewBuilder private func connectedView(_ text: String) -> some View {
         animatingHUDView()
+            .padding(.horizontal, 20)
             .opacity(animatingHUDViewOpacity)
         VStack {
             if showMiniCard == false {
@@ -163,16 +167,17 @@ struct GameView: View {
     }
     
     @ViewBuilder private func gameButtonView(text: String, action: @escaping () -> Void) -> some View {
-        Button(text) {
+        Button {
             action()
+        } label: {
+            Text(text)
+                .font(GameUx.buttonFont())
+                .padding(.horizontal, 60)
+                .foregroundColor(.white)
         }
-        .font(GameUx.buttonFont())
-        .foregroundColor(.black)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.black, lineWidth: 1)
-        )
+        .tint(GameUx.brandColor())
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.capsule)
     }
 }
 
@@ -183,6 +188,7 @@ extension GameView {
         VStack {
             GeometryReader { geometry in
                 gameHUDView()
+                    .padding(.horizontal, 20)
                 boardRepresentableView(geometry: geometry)
             }
             .onAppear {
@@ -227,20 +233,26 @@ extension GameView {
                             .frame(width: 60, height: 60)
                             .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
                     } else {
-                        ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: true)
+//                        ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: true)
+//                            .frame(width: 60, height: 60)
+                        Rectangle()
                             .frame(width: 60, height: 60)
+                            .foregroundColor(.clear)
+                        
                     }
                 }
                 .transition(.scale(scale: 1))
                 .padding(.horizontal)
                 Spacer()
-                Text(GameStrings.play)
-                    .frame(minWidth: 150)
-                Spacer()
+//                Text(GameStrings.play)
+//                    .frame(minWidth: 150)
+//                Spacer()
                 player2HUDView()
             }
-            .frame(width: geometry.size.width, height: hudViewHeight)
-            .border(.red, width: 1)
+            .frame(height: hudViewHeight)
+            .padding()
+            .background(.ultraThinMaterial)
+            .cornerRadius(30)
         }
     }
     
@@ -248,12 +260,15 @@ extension GameView {
         HStack {
             player1HUDView()
             Spacer()
-            Text(GameStrings.play)
-                .frame(minWidth: 150)
-            Spacer()
+//            Text(GameStrings.play)
+//                .frame(minWidth: 150)
+//            Spacer()
             player2HUDView()
         }
         .frame(height: hudViewHeight)
+        .padding()
+        .background(.ultraThinMaterial)
+        .cornerRadius(30)
     }
     
     @ViewBuilder private func player1HUDView() -> some View {

@@ -77,6 +77,6 @@ enum CardType {
 
 struct CardDetail {
     static let letters = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-    static let suits = ["♠️", "♥️", "♦️", "♣️"]
+    static let suits = ["suit.spade.fill", "suit.heart.fill", "suit.diamond.fill", "suit.club.fill"]
 }
 

@@ -39,6 +39,7 @@ final class GameManager: ObservableObject {
                 print("gm: received socket event: \(socketState)")
                 self?.updateGameState(forSocketState: socketState)
             }
+//        self.setupBoard() // to remove
     }
     
     deinit {

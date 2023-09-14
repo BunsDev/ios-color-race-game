@@ -11,28 +11,30 @@ struct StartView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer()
-                Text(GameStrings.title)
-                    .font(GameUx.titleFont())
-                    .padding()
-                NavigationLink(destination: GameView()) {
-                    textView(GameStrings.enter)
+            ZStack {
+                BackgroundView()
+                VStack {
+                    Text(GameStrings.title)
+                        .font(GameUx.titleFont())
+                        .foregroundColor(GameUx.brandColor())
+                        .padding()
+                    NavigationLink(destination: GameView()) {
+                        textView(GameStrings.enter)
+                    }
+                    .tint(GameUx.brandColor())
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                 }
-                Spacer()
             }
+            .ignoresSafeArea()
         }
     }
     
     @ViewBuilder private func textView(_ title: String) -> some View {
         Text(title)
             .font(GameUx.buttonFont())
-            .foregroundColor(.black)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black, lineWidth: 1)
-            )
+            .foregroundColor(.white)
+            .padding(.horizontal, 60)
     }
 }
 

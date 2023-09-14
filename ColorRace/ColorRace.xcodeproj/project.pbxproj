@@ -16,6 +16,7 @@
 		E45E40832A9F0F1D00EFDBC7 /* CardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45E40822A9F0F1D00EFDBC7 /* CardStore.swift */; };
 		E46639832A946DB200532E7B /* ColorGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46639822A946DB200532E7B /* ColorGridView.swift */; };
 		E466B6992A91C0B70023FFC4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = E466B6982A91C0B70023FFC4 /* Card.swift */; };
+		E47272D92AB2B81F005FBA25 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47272D82AB2B81F005FBA25 /* BackgroundView.swift */; };
 		E48548C12AA2EFC6009803AD /* CardFlipAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48548C02AA2EFC6009803AD /* CardFlipAnimator.swift */; };
 		E48ED2382AA70EB700070908 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E48ED2372AA70EB700070908 /* Preview Assets.xcassets */; };
 		E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48ED2392AA728AE00070908 /* UIImage+Color.swift */; };
@@ -40,6 +41,7 @@
 		E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB23752A9B20F50014F1C9 /* BoardViewRepresentable.swift */; };
 		E4EB237A2A9B41000014F1C9 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB23792A9B41000014F1C9 /* BoardView.swift */; };
 		E4EB237C2A9B42F10014F1C9 /* BoardTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB237B2A9B42F10014F1C9 /* BoardTileView.swift */; };
+		E4FAF20D2AB31A3C00F67CB7 /* GameColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FAF20C2AB31A3C00F67CB7 /* GameColors.swift */; };
 		E4FE5F952A91DFD100A860DC /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FE5F942A91DFD100A860DC /* StartView.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,7 @@
 		E45E40822A9F0F1D00EFDBC7 /* CardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStore.swift; sourceTree = "<group>"; };
 		E46639822A946DB200532E7B /* ColorGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGridView.swift; sourceTree = "<group>"; };
 		E466B6982A91C0B70023FFC4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		E47272D82AB2B81F005FBA25 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		E48548C02AA2EFC6009803AD /* CardFlipAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFlipAnimator.swift; sourceTree = "<group>"; };
 		E48ED2372AA70EB700070908 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E48ED2392AA728AE00070908 /* UIImage+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		E4EB23752A9B20F50014F1C9 /* BoardViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewRepresentable.swift; sourceTree = "<group>"; };
 		E4EB23792A9B41000014F1C9 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		E4EB237B2A9B42F10014F1C9 /* BoardTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTileView.swift; sourceTree = "<group>"; };
+		E4FAF20C2AB31A3C00F67CB7 /* GameColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameColors.swift; sourceTree = "<group>"; };
 		E4FE5F942A91DFD100A860DC /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +120,7 @@
 				E4EB23792A9B41000014F1C9 /* BoardView.swift */,
 				E4EB237B2A9B42F10014F1C9 /* BoardTileView.swift */,
 				E4379F752AB04D6F00276BAE /* DiamondPatternView.swift */,
+				E47272D82AB2B81F005FBA25 /* BackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				E497A65B2A9DD04A00C58FA4 /* GameUx.swift */,
+				E4FAF20C2AB31A3C00F67CB7 /* GameColors.swift */,
 				E4AD1B392A93610000ACF69B /* GameState.swift */,
 				E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */,
 				E4AD1B612A9388AE00ACF69B /* GameStrings.swift */,
@@ -317,6 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E47272D92AB2B81F005FBA25 /* BackgroundView.swift in Sources */,
 				E46639832A946DB200532E7B /* ColorGridView.swift in Sources */,
 				E4FE5F952A91DFD100A860DC /* StartView.swift in Sources */,
 				E4379F762AB04D6F00276BAE /* DiamondPatternView.swift in Sources */,
@@ -332,6 +339,7 @@
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
 				E4AA22A42AADB70C006A1C99 /* UIView+Tap.swift in Sources */,
 				E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */,
+				E4FAF20D2AB31A3C00F67CB7 /* GameColors.swift in Sources */,
 				E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */,
 				E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */,
 				E48548C12AA2EFC6009803AD /* CardFlipAnimator.swift in Sources */,
