@@ -89,6 +89,23 @@ function handleDisconnect(socket) {
   }
 }
 
+function handleUserWon(socket) {
+  // Display the current state of all namespaces
+  console.log('\n');
+  for (const ns of namespaces) {
+    console.log(`=> Current namespace ${ns.name}: , count: ${ns.users.length}`);
+  }
+  console.log('\n');
+
+  const namespaceName = findNamespaceByUser(socket.id);
+
+  if (namespaceName) {
+    console.log(`=> A user won`);
+    // Notify other users on the namespace about the disconnect
+    socket.to(namespaceName).emit('userWon', socket.id);
+  }
+}
+
 // Function to find a namespace by user
 function findNamespaceByUser(userId) {
   for (const ns of namespaces) {
@@ -119,16 +136,6 @@ function checkForSingleUserNamespaces() {
 
     // Merge the two namespaces
     const mergedNamespace = createNamespace();
-
-    // for (const [_, socket] of io.of("/").sockets) {
-    //   const nameSpace = findNamespaceByUser(socket.id)
-    //   if(nameSpace === namespace1.name || nameSpace === namespace2.name) {
-    //     console.log(`=> Found socket ${socket.id} to merge`);
-    //     connectToNamespace(socket, mergedNamespace);
-    //   } else {
-    //     console.log(`=> No socket found to merge`);
-    //   }
-    // }
 
     for (const socketId of namespace1.users) {
       const socket = io.of("/").sockets.get(socketId);
@@ -189,6 +196,12 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     handleDisconnect(socket);
   });
+
+  // Handle user won
+  socket.on('userWon', () => {
+    handleUserWon(socket);
+  });
+
 });
 
 // Function to create a new namespace
