@@ -19,16 +19,16 @@ struct CardStore {
     static let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
     static let standardCardBackView = CardBackView(cardLayout: standardCardLayout, cardBack: standardCardBack, degree: .constant(0))
     
-    static let mediumCardFace = CardFace(letter: "A", suit: "♠️", fontSize: 10, colors: defaultBoardColors, type: .small)
-    static let mediumCardFaceView = CardFaceView(cardLayout: mediumCardLayout, cardFace: mediumCardFace, degree: .constant(0))
+    static let mediumCardFace = CardFace(letter: "A", suit: "♠️", fontSize: 10, colors: defaultBoardColors)
+    static let mediumCardFaceView = CardFaceView(cardLayout: mediumCardLayout, cardFace: mediumCardFace, degree: .constant(0), opacity: .constant(1))
     
-    static let standardCardFace = CardFace(letter: "A", suit: "♣️", fontSize: 20, colors: defaultBoardColors, type: .standard)
-    static let standardCardFaceView = CardFaceView(cardLayout: standardCardLayout, cardFace: standardCardFace, degree: .constant(0))
+    static let standardCardFace = CardFace(letter: "A", suit: "♣️", fontSize: 20, colors: defaultBoardColors)
+    static let standardCardFaceView = CardFaceView(cardLayout: standardCardLayout, cardFace: standardCardFace, degree: .constant(0), opacity: .constant(1))
     
     static let defaultBoardColors: [[UIColor]] = Array(repeating: Array(repeating: UIColor.white, count: 3), count: 3)
     
     static func mediumCardFaceWithColors(_ colors: [[UIColor]]) -> CardFace {
-        return CardFace(letter: CardDetail.letters.randomElement()!, suit: CardDetail.suits.randomElement()!, fontSize: 10, colors: colors, type: .medium)
+        return CardFace(letter: CardDetail.letters.randomElement()!, suit: CardDetail.suits.randomElement()!, fontSize: 10, colors: colors)
     }
 
     static func loadingCards() -> [AnyView] {

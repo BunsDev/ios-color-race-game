@@ -20,9 +20,7 @@ class BoardView: UIView {
     private let tilesPerRow = 3
     private let tileSize = CGSize(width: 100, height: 100)
     private let tileContainerView = UIView()
-    private let tileColors: [UIColor] = [
-        GameColors.white(), GameColors.blue(), GameColors.orange(), GameColors.yellow(), GameColors.green(), GameColors.red()
-    ]
+    private let tileColors: [UIColor] = GameColors.allColors()
     private var boardColors: [[UIColor]]
 
     init(frame: CGRect, boardColors: [[UIColor]]) {
@@ -50,7 +48,7 @@ class BoardView: UIView {
     }
     
     func addTiles() {
-        let tileSpacing: CGFloat = 10.0 // Adjust this value to control the spacing between tiles
+        let tileSpacing: CGFloat = 10.0
         tileContainerView.frame = CGRect(origin: .zero, size: CGSize(width: tileSize.width * CGFloat(tilesPerRow) + tileSpacing * CGFloat(tilesPerRow - 1),
                                                                      height: tileSize.height * CGFloat(tilesPerRow) + tileSpacing * CGFloat(tilesPerRow - 1)))
         for row in 0..<tilesPerRow {
@@ -124,18 +122,16 @@ extension BoardView: BoardTileViewDelegate {
         let col = index % tilesPerRow
 
         if boardColors[row][col] == color {
-            // TODO: update to get the currentcolor from tile view
+
             let allMatch = tileContainerView.subviews.enumerated().allSatisfy { (index, subview) in
                 let row = index / tilesPerRow
                 let col = index % tilesPerRow
-                return boardColors[row][col] == subview.backgroundColor
+                return boardColors[row][col] == (subview as? BoardTileView)?.currentColor
             }
 
             if allMatch {
                 showWinningAnimation()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in // allow for animation to complete
-                    self?.delegate?.userWon()
-                }
+                self.delegate?.userWon()
                 // TODO: Be notified of losing event
             }
         }

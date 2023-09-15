@@ -29,7 +29,6 @@ protocol CardFaceDrawable {
     var letter: String { get }
     var suit: String { get }
     var fontSize: CGFloat { get }
-    var type: CardType { get }
     var colors: [[UIColor]] { get }
 }
 
@@ -47,7 +46,6 @@ struct CardFace: CardFaceDrawable {
     var suit: String
     var fontSize: CGFloat
     var colors: [[UIColor]]
-    var type: CardType
 }
 
 enum CardRenderer {
@@ -67,12 +65,6 @@ struct CardLayout: CardProps {
 struct CardDesign {
     var layout: CardLayout
     var renderer: CardRenderer
-}
-
-enum CardType {
-    case small
-    case medium
-    case standard
 }
 
 struct CardDetail {

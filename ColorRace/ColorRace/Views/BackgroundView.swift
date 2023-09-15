@@ -30,20 +30,18 @@ struct BackgroundView: View {
                     }
                 }
                 .overlay(alignment: .topTrailing) {
-                    VStack {
-                        Image(systemName: CardDetail.suits.randomElement()!)
-                            .font(.system(size: 150))
-                            .frame(width: 200, height: 200)
-                            .offset(x: -100)
-                            .rotationEffect(.degrees(-180))
-                            .foregroundColor(GameUx.brandLightColor())
-                    }
+                    Image(systemName: CardDetail.suits.randomElement()!)
+                        .font(.system(size: 150))
+                        .frame(width: 200, height: 200)
+                        .offset(x: -50)
+                        .rotationEffect(.degrees(-180))
+                        .foregroundColor(GameUx.brandLightColor())
                 }
                 .overlay(alignment: .bottomLeading) {
                     Image(systemName: CardDetail.suits.randomElement()!)
                         .font(.system(size: 300))
                         .frame(width: 300, height: 200)
-                        .offset(x: -150)
+                        .offset(x: -100)
                         .foregroundColor(GameUx.brandLightColor())
                 }
         }

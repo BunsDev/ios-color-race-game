@@ -11,14 +11,7 @@ import SwiftUI
 
 struct BoardViewRepresentable: UIViewRepresentable {
     typealias UIViewType = BoardView
-    @Binding var userWon: Bool {
-        willSet { newValue
-            print("willSet userWon: \(newValue)")
-        }
-        didSet {
-            print("didSet userWon: \(userWon)")
-        }
-    }
+    @Binding var userWon: Bool
     @Binding var boardColors: [[UIColor]]
     
     func makeUIView(context: Context) -> BoardView {

@@ -33,4 +33,10 @@ internal struct GameColors {
     static func white() -> UIColor {
         UIColor.white
     }
+    
+    static func allColors() -> [UIColor] {
+        [
+            GameColors.white(), GameColors.blue(), GameColors.orange(), GameColors.yellow(), GameColors.green(), GameColors.red()
+        ]
+    }
 }

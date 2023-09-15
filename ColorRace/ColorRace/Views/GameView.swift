@@ -12,10 +12,11 @@ struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
     @ObservedObject private var cardFlipAnimator = CardFlipAnimator()
-    @State private var animatingHUDViewOpacity: Double = 0
+    @State private var hudOpacity: Double = 0
     @State private var showGameBoard = false
     @State private var showMiniCard = false
     @State private var userWon: Bool = false
+    @State private var faceCardOpacity = 1.0
     @Namespace private var miniCardAnimation
     private let hudViewHeight = 100.0
     
@@ -27,13 +28,10 @@ struct GameView: View {
         ZStack {
             // MARK: Game Container
             gameView()
-            
 //            boardView()
-                
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-//            GameUx.background()
             BackgroundView()
         )
         .font(GameUx.subtitleFont())
@@ -41,22 +39,21 @@ struct GameView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                navigationToolbarCloseButton()
+                navigationCloseButton()
             }
         }
+        .foregroundColor(GameUx.brandColor())
         .onDisappear {
             gameManager.quitGame()
         }
     }
     
-    @ViewBuilder private func navigationToolbarCloseButton() -> some View {
+    @ViewBuilder private func navigationCloseButton() -> some View {
         Button {
             self.presentation.wrappedValue.dismiss()
         } label: {
             Image(systemName: "arrowshape.turn.up.backward.fill")
-                .foregroundColor(GameUx.brandColor())
         }
-//        .foregroundColor(.black)
     }
     
     @ViewBuilder private func gameView() -> some View {
@@ -90,43 +87,40 @@ struct GameView: View {
             connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
             }
-        }.onAppear {
-            //            DispatchQueue.main.asyncAfter(deadline: .now()) { withAnimation(.linear) { showMiniCard = true } }
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { gameManager.preparedGame() }
         }
     }
-    
+
     @ViewBuilder private func connectedView(_ text: String) -> some View {
-        animatingHUDView()
+        
+        animatingHUDView(showDefault: true)
             .padding(.horizontal, 20)
-            .opacity(animatingHUDViewOpacity)
+            .opacity(hudOpacity)
+        
         VStack {
-            if showMiniCard == false {
-                VStack {
-                    ZStack {
-                        CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors), degree: $cardFlipAnimator.frontDegree)
-                        CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
-                    }
-                    .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
-                    .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
-                }
-                .transition(.scale(scale: 1))
+            ZStack {
+                CardFaceView(cardLayout: CardStore.mediumCardLayout, cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors), degree: $cardFlipAnimator.frontDegree, opacity: $faceCardOpacity)
+                    .matchedGeometryEffect(id: showMiniCard ? "minimise" : "", in: miniCardAnimation, properties: .position, isSource: false)
+                CardBackView(cardLayout: CardStore.mediumCardLayout, cardBack: CardStore.mediumCardBack, degree: $cardFlipAnimator.backDegree)
             }
+            .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+            
             connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
             }
-            .opacity(showMiniCard ? 0 : 1)
+            .opacity(faceCardOpacity)
         }
         .onAppear {
             cardFlipAnimator.setDefaults()
-            withAnimation(.linear(duration: 0.25)) { animatingHUDViewOpacity = 1 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { cardFlipAnimator.flipCard() } // cardFlipAnimation lasts ~ 0.75s
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { withAnimation(.linear) { showMiniCard = true } }
+            withAnimation(.easeInOut(duration: 0.25)) { hudOpacity = 1 }
+            withAnimation(.easeInOut.delay(0.25)) { cardFlipAnimator.flipCard() }
+            withAnimation(.easeInOut.delay(0.75)) { faceCardOpacity = 0 }
+            withAnimation(.easeInOut.delay(1.0)) { showMiniCard = true }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { gameManager.preparedGame() }
         }
         .onDisappear {
+            faceCardOpacity = 1
             showMiniCard = false
-            animatingHUDViewOpacity = 0
+            hudOpacity = 0
             cardFlipAnimator.setDefaults()
         }
     }
@@ -187,7 +181,7 @@ extension GameView {
     @ViewBuilder private func boardView() -> some View {
         VStack {
             GeometryReader { geometry in
-                gameHUDView()
+                animatingHUDView(showDefault: false)
                     .padding(.horizontal, 20)
                 boardRepresentableView(geometry: geometry)
             }
@@ -222,31 +216,11 @@ extension GameView {
 // MARK: - HUD's
 extension GameView {
     
-    @ViewBuilder private func animatingHUDView() -> some View {
+    @ViewBuilder private func animatingHUDView(showDefault: Bool) -> some View {
         GeometryReader { geometry in
             HStack {
-                VStack {
-                    Text(GameStrings.player1)
-                        .frame(height: 25)
-                    if showMiniCard {
-                        ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
-                            .frame(width: 60, height: 60)
-                            .matchedGeometryEffect(id: "minimise", in: miniCardAnimation)
-                    } else {
-//                        ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: true)
-//                            .frame(width: 60, height: 60)
-                        Rectangle()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.clear)
-                        
-                    }
-                }
-                .transition(.scale(scale: 1))
-                .padding(.horizontal)
+                player1HUDView(showDefault: showDefault)
                 Spacer()
-//                Text(GameStrings.play)
-//                    .frame(minWidth: 150)
-//                Spacer()
                 player2HUDView()
             }
             .frame(height: hudViewHeight)
@@ -256,27 +230,13 @@ extension GameView {
         }
     }
     
-    @ViewBuilder private func gameHUDView() -> some View {
-        HStack {
-            player1HUDView()
-            Spacer()
-//            Text(GameStrings.play)
-//                .frame(minWidth: 150)
-//            Spacer()
-            player2HUDView()
-        }
-        .frame(height: hudViewHeight)
-        .padding()
-        .background(.ultraThinMaterial)
-        .cornerRadius(30)
-    }
-    
-    @ViewBuilder private func player1HUDView() -> some View {
+    @ViewBuilder private func player1HUDView(showDefault: Bool) -> some View {
         VStack {
             Text(GameStrings.player1)
                 .frame(height: 25)
-            ColorGridView(cardType: .small, colors: gameManager.boardColors, displayDefault: false)
-                .frame(width: 60, height: 60)
+            ColorGridView(colors: gameManager.boardColors, displayDefault: showDefault)
+                .frame(width: 50, height: 50)
+                .matchedGeometryEffect(id: "minimise", in: miniCardAnimation, properties: .frame, isSource: true)
         }
         .padding(.horizontal)
     }
@@ -285,8 +245,8 @@ extension GameView {
         VStack {
             Text(GameStrings.player2)
                 .frame(height: 25)
-            ColorGridView(cardType: .small, colors: CardStore.defaultBoardColors, displayDefault: true)
-                .frame(width: 60, height: 60)
+            ColorGridView(colors: CardStore.defaultBoardColors, displayDefault: true)
+                .frame(width: 50, height: 50)
         }
         .padding(.horizontal)
     }

@@ -14,7 +14,7 @@ struct CardView: View {
         VStack {
             switch cardDesign.renderer {
             case .face(let cardDrawable):
-                CardFaceView(cardLayout: cardDesign.layout, cardFace: cardDrawable, degree: .constant(0))
+                CardFaceView(cardLayout: cardDesign.layout, cardFace: cardDrawable, degree: .constant(0), opacity: .constant(1))
             case .back(let cardDrawable):
                 CardBackView(cardLayout: cardDesign.layout, cardBack: cardDrawable, degree: .constant(0))
             }

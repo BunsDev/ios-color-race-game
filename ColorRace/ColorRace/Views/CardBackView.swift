@@ -30,7 +30,6 @@ struct CardBackView: View {
                     DiamondPatternView(rows: 21, cols: 7, color: cardBack.innerBorderColor)
                         .padding(15)
                 )
-            
         }
         .frame(width: cardLayout.width, height: cardLayout.height)
         .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))

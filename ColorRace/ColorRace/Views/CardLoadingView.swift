@@ -18,7 +18,6 @@ extension Animation {
     }
 }
 
-/// An animate card loading view that displays a stack of cards that fan out
 struct CardLoadingView: View {
     @State var cards: [AnyView]
     @State var animate = false
@@ -51,7 +50,7 @@ struct CardLoadingView: View {
 struct CardContainerView_Previews: PreviewProvider {
     static var previews: some View {
         let standardCardLayout = CardLayout(width: 200, height: 330, color: .white, cornerRadius: 15, borderWidth: 2, borderColor: .black)
-        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, colors: CardStore.defaultBoardColors, type: .standard)
+        let standardCardFace = CardFace(letter: "10", suit: "♣️", fontSize: 20, colors: CardStore.defaultBoardColors)
         let standardCardBack = CardBack(text: "CR", font: GameUx.titleFont(), textColor: .black, innerCornerRadius: 15, innerBorderColor: .black, innerBorderWidth: 2)
         let cardFaceView = CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .face(drawable: standardCardFace)))
         let cardBackView = CardView(cardDesign: CardDesign(layout: standardCardLayout, renderer: .back(drawable: standardCardBack)))

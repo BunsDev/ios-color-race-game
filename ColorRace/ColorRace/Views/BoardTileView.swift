@@ -63,19 +63,22 @@ class BoardTileView: UIView {
         tileView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         
         addSubview(tileView)
-//        tileView.backgroundColor = .white
+        currentColor = GameColors.white()
+        tileView.backgroundColor = currentColor
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         colorIndex = (colorIndex + 1) % colors.count
         let color = colors[colorIndex]
-        
+        currentColor = color
         UIView.animate(withDuration: 0.05) { [weak self] in
-            self?.tileView.backgroundColor = color
-            self?.transform = CGAffineTransformMakeScale(0.95, 0.95)
+            guard let self = self else { return }
+            self.tileView.backgroundColor = color
+            self.transform = CGAffineTransformMakeScale(0.95, 0.95)
         } completion: { [weak self] _ in
-            self?.delegate?.boardTileView((self?.tileView)!, didSelectColor: color)
-            self?.transform = .identity
+            guard let self = self else { return }
+            self.delegate?.boardTileView(self, didSelectColor: color)
+            self.transform = .identity
         }
     }
 }

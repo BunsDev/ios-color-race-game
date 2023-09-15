@@ -11,8 +11,6 @@ import SwiftUI
 class CardFlipAnimator: ObservableObject {
     @Published var backDegree = 0.0
     @Published var frontDegree = -90.0
-    @Published private var isFlipped = false
-    @Published private var flipAnimationCompleted = false
     private let durationAndDelay: CGFloat = 0.25
     
     func flipCard () {

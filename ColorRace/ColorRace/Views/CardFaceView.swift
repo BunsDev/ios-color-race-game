@@ -11,30 +11,29 @@ struct CardFaceView: View {
     @State var cardLayout: CardLayout
     @State var cardFace: CardFaceDrawable
     @Binding var degree: Double
-    private let colorGridWidth = 40.0
-    private let colorGridHeight = 40.0
+    @Binding var opacity: Double
+    private let colorGridWidth = 50.0
+    private let colorGridHeight = 50.0
     
     var body: some View {
-        GeometryReader { geometry in
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
-                    .strokeBorder(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
-                    .background(
-                        RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(cardLayout.color)
-                    )
-                    .frame(width: cardLayout.width, height: cardLayout.height)
-                    .overlay(alignment: .topLeading) {
-                        topDetailView()
-                    }
-                    .overlay(alignment: .bottomTrailing) {
-                        bottomDetailView()
-                    }
-                    .overlay(alignment: .center) {
-                        ColorGridView(cardType: cardFace.type, colors: cardFace.colors, displayDefault: false)
-                            .frame(width: colorGridWidth, height: colorGridHeight)
-                    }
-            }
+        ZStack {
+            RoundedRectangle(cornerRadius: cardLayout.cornerRadius)
+                .strokeBorder(cardLayout.borderColor, lineWidth: cardLayout.borderWidth)
+                .background(
+                    RoundedRectangle(cornerRadius: cardLayout.cornerRadius).fill(cardLayout.color)
+                )
+                .frame(width: cardLayout.width, height: cardLayout.height)
+                .overlay(alignment: .topLeading) {
+                    topDetailView()
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    bottomDetailView()
+                }
+                .opacity(opacity)
+                .overlay(alignment: .center) {
+                    ColorGridView(colors: cardFace.colors, displayDefault: false)
+                        .frame(width: colorGridWidth, height: colorGridHeight)
+                }
         }
         .frame(width: cardLayout.width, height: cardLayout.height)
         .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))

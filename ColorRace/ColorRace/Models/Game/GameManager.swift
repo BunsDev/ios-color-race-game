@@ -27,7 +27,7 @@ final class GameManager: ObservableObject {
     @Published private var socketState = SocketConnectionState.disconnected
     
     /// Game board
-    private let boardTileColors: [UIColor] = [.red, .blue, .orange, .yellow, .green, .white]
+    private let boardTileColors: [UIColor] = GameColors.allColors()
     var boardColors: [[UIColor]] = []
     
     init() {
