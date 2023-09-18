@@ -19,14 +19,14 @@ struct GameView: View {
     @State private var faceCardOpacity = 1.0
     @Namespace private var miniCardAnimation
     private let hudViewHeight = 75.0
+    private let hudVerticalPadding = 20.0
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: GameUx.brandUIColor()]
     }
     
     var body: some View {
-        ZStack {
-            // MARK: Game Container
+        VStack(spacing: 0) {
             gameView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -79,37 +79,29 @@ struct GameView: View {
     }
     
     @ViewBuilder private func connectingView(_ text: String) -> some View {
-        VStack {
+        VStack(spacing: 0) {
             CardLoadingView(cards: CardStore.loadingCards())
             connectingStatusView(text, buttonText: GameStrings.cancel) {
                 gameManager.quitGame()
             }
         }
+        .border(.red)
     }
 
     @ViewBuilder private func connectedView(_ text: String) -> some View {
-        
         animatingHUDView(showDefault: true)
             .padding(.horizontal, 20)
             .opacity(hudOpacity)
-        
-        VStack {
-            ZStack {
-                CardFaceView(cardLayout: CardStore.mediumCardLayout,
-                             cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors),
-                             degree: $cardFlipAnimator.frontDegree,
-                             opacity: $faceCardOpacity)
-                    .matchedGeometryEffect(id: showMiniCard ? "minimise" : "", in: miniCardAnimation, properties: .position, isSource: false)
-                CardBackView(cardLayout: CardStore.mediumCardLayout,
-                             cardBack: CardStore.mediumCardBack,
-                             degree: $cardFlipAnimator.backDegree)
-            }
-            .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
-            
-            connectingStatusView(text, buttonText: GameStrings.cancel) {
-                gameManager.quitGame()
-            }
-            .opacity(faceCardOpacity)
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                flippingCardView()
+                connectingStatusView(text, buttonText: GameStrings.cancel) {
+                    gameManager.quitGame()
+                }
+                .opacity(faceCardOpacity)
+            }.position(x: proxy.frame(in: .local).midX,
+                       y: proxy.frame(in: .local).midY - hudViewHeight/2 - hudVerticalPadding)
+                .border(.green)
         }
         .onAppear {
             cardFlipAnimator.setDefaults()
@@ -127,6 +119,21 @@ struct GameView: View {
         }
     }
     
+    @ViewBuilder private func flippingCardView() -> some View {
+        ZStack {
+            CardFaceView(cardLayout: CardStore.mediumCardLayout,
+                         cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors),
+                         degree: $cardFlipAnimator.frontDegree,
+                         opacity: $faceCardOpacity)
+                .matchedGeometryEffect(id: showMiniCard ? "minimise" : "", in: miniCardAnimation, properties: .position, isSource: false)
+            CardBackView(cardLayout: CardStore.mediumCardLayout,
+                         cardBack: CardStore.mediumCardBack,
+                         degree: $cardFlipAnimator.backDegree)
+        }
+        .border(.black)
+        .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+    }
+
     @ViewBuilder private func connectingStatusView(_ statusText: String, buttonText: String, action: @escaping () -> Void) -> some View {
         Text(statusText)
             .padding(.vertical)
@@ -135,18 +142,22 @@ struct GameView: View {
     }
     
     @ViewBuilder private func gameResultView(_ result: Bool) -> some View {
-        VStack {
-            ZStack {
+        animatingHUDView(showDefault: false)
+            .padding(.horizontal, 20)
+        GeometryReader { proxy in
+            VStack {
                 LottieViewRepresentable(filename: "animation_losing", loopMode: .playOnce)
                     .rotationEffect(.degrees(result ? 180 : 0))
                     .frame(width: 150, height: 150)
-            }
-            Text(result ? GameStrings.userWon : GameStrings.userLost)
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
-            Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
+                Text(result ? GameStrings.userWon : GameStrings.userLost)
+                    .padding(.vertical)
+                    .multilineTextAlignment(.center)
+                Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
+                    .padding(.vertical)
+                    .multilineTextAlignment(.center)
+            }.position(x: proxy.frame(in: .local).midX,
+                       y: proxy.frame(in: .local).midY)
+                .border(.green)
         }
     }
     
@@ -169,11 +180,21 @@ struct GameView: View {
 extension GameView {
     
     @ViewBuilder private func boardView() -> some View {
-        VStack {
-            GeometryReader { geometry in
-                animatingHUDView(showDefault: false)
-                    .padding(.horizontal, 20)
-                boardRepresentableView(geometry: geometry)
+        animatingHUDView(showDefault: false)
+            .padding(.horizontal, 20)
+        boardRepresentableView()
+                .border(.red)
+    }
+    
+    @ViewBuilder private func boardRepresentableView() -> some View {
+        BoardViewRepresentable(userWon: $userWon, boardColors: $gameManager.boardColors)
+            .offset(y: showGameBoard ? 0 : UIScreen.main.bounds.size.height)
+            .transition(.slide)
+            .animation(.spring(dampingFraction: 0.6), value: showGameBoard)
+            .clipped()
+            .onChange(of: userWon) { newValue in
+                print("boardRepresentableView \(newValue)")
+                gameManager.userWonGame()
             }
             .onAppear {
                 showGameBoard = true
@@ -182,24 +203,6 @@ extension GameView {
                 showGameBoard = false
                 userWon = false
             }
-        }
-        .clipped()
-    }
-    
-    @ViewBuilder private func boardRepresentableView(geometry: GeometryProxy) -> some View {
-        VStack {
-            BoardViewRepresentable(userWon: $userWon, boardColors: $gameManager.boardColors)
-                .frame(width: geometry.size.width, height: geometry.size.height)
-        }
-        .frame(width: geometry.size.width, height: geometry.size.height)
-        .offset(y: showGameBoard ? 0 : geometry.size.height)
-        .transition(.slide)
-        .animation(.spring(dampingFraction: 0.6), value: showGameBoard)
-        .clipped()
-        .onChange(of: userWon) { newValue in
-            print("boardRepresentableView \(newValue)")
-            gameManager.userWonGame()
-        }
     }
 }
 
@@ -207,17 +210,15 @@ extension GameView {
 extension GameView {
     
     @ViewBuilder private func animatingHUDView(showDefault: Bool) -> some View {
-        GeometryReader { geometry in
-            HStack {
-                player1HUDView(showDefault: showDefault)
-                Spacer()
-                player2HUDView()
-            }
-            .frame(height: hudViewHeight)
-            .padding()
-            .background(.ultraThinMaterial)
-            .cornerRadius(30)
+        HStack {
+            player1HUDView(showDefault: showDefault)
+            Spacer()
+            player2HUDView()
         }
+        .frame(height: hudViewHeight)
+        .padding(.vertical, hudVerticalPadding)
+        .background(.ultraThinMaterial)
+        .cornerRadius(30)
     }
     
     @ViewBuilder private func player1HUDView(showDefault: Bool) -> some View {
