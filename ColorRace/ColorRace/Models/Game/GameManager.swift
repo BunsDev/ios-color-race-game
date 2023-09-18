@@ -29,6 +29,7 @@ final class GameManager: ObservableObject {
     /// Game board
     private let boardTileColors: [UIColor] = GameColors.allColors()
     var boardColors: [[UIColor]] = []
+    @Published var opponentColors: [[UIColor]] = []
     
     init() {
         self.socketManager = SocketManager(socketURL: socketURL, config: [.log(loggingEnabled), .compress])
@@ -39,7 +40,6 @@ final class GameManager: ObservableObject {
                 print("gm: received socket event: \(socketState)")
                 self?.updateGameState(forSocketState: socketState)
             }
-        setupBoard()// TODO: remove
     }
     
     deinit {
@@ -60,21 +60,21 @@ extension GameManager {
     func quitGame() {
         closeConnection()
     }
-
+    
     func preparedGame() {
         gameState = .playing
     }
-
+    
     func userWonGame() {
         gameState = .userWon
         userWonOnConnection()
         startNextRoundTimer()
     }
-
+    
     func userLostGame() {
         startNextRoundTimer()
     }
-
+    
     private func startNextRoundTimer() {
         secondsToNextRound = 3
         stopNextRoundTimer()
@@ -90,7 +90,7 @@ extension GameManager {
         
         secondsToNextRound -= 1
     }
-
+    
     private func stopNextRoundTimer() {
         timer.invalidate()
     }
@@ -99,7 +99,7 @@ extension GameManager {
         setupBoard()
         gameState = .preparingGame
     }
-   
+    
     private func setupBoard() {
         generateRandomBoardColors()
     }
@@ -112,26 +112,26 @@ extension GameManager {
         }
         print(boardColors)
     }
-
+    
     private func updateGameState(forSocketState socketState: SocketConnectionState) {
         switch socketState {
-
+            
         case .disconnected, .userDisconnected:
             gameState = .disconnected(joinText: GameStrings.joinGame)
-
+            
         case .userConnected, .userJoined, .opponentDisconnected:
             gameState = .connectingToOpponent(connectionText: GameStrings.waitingForOpponent)
-
+            
         case .opponentJoined:
             gameState = (gameState == .playing || gameState == .preparingGame) ? gameState : .connectingToOpponent(connectionText: GameStrings.waitingForOpponent)
-
+            
         case .gameStarted:
             setupBoard()
             gameState = .preparingGame
-
+            
         case .connectingToServer:
             gameState = .connectingToServer(connectionText: GameStrings.connectingToServer)
-        
+            
         case .userLost:
             gameState = .userLost
             userLostGame()
@@ -212,9 +212,9 @@ extension GameManager {
                 self?.socketState = .userLost
             }
         }
-
+        
     }
-
+    
     private func establishConnection() {
         socketState = .connectingToServer
         addEventListeners()
@@ -230,7 +230,7 @@ extension GameManager {
         socket?.emit(SocketEvents.disconnectNamespace, namespace)
         socket?.disconnect()
     }
-
+    
     private func userWonOnConnection() {
         guard let namespace = namespace else {
             socket?.disconnect()

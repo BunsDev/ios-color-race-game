@@ -53,6 +53,7 @@ struct GameView: View {
         } label: {
             Image(systemName: "arrowshape.turn.up.backward.fill")
         }
+        .fixedSize()
     }
     
     @ViewBuilder private func gameView() -> some View {
@@ -76,6 +77,7 @@ struct GameView: View {
         gameButtonView(text: text) {
             gameManager.joinGame()
         }
+        .fixedSize()
     }
     
     @ViewBuilder private func connectingView(_ text: String) -> some View {
@@ -85,9 +87,10 @@ struct GameView: View {
                 gameManager.quitGame()
             }
         }
+        .fixedSize()
         .border(.red)
     }
-
+    
     @ViewBuilder private func connectedView(_ text: String) -> some View {
         animatingHUDView(showDefault: true)
             .padding(.horizontal, 20)
@@ -101,7 +104,7 @@ struct GameView: View {
                 .opacity(faceCardOpacity)
             }.position(x: proxy.frame(in: .local).midX,
                        y: proxy.frame(in: .local).midY - hudViewHeight/2 - hudVerticalPadding)
-                .border(.green)
+            .border(.green)
         }
         .onAppear {
             cardFlipAnimator.setDefaults()
@@ -125,20 +128,24 @@ struct GameView: View {
                          cardFace: CardStore.mediumCardFaceWithColors(gameManager.boardColors),
                          degree: $cardFlipAnimator.frontDegree,
                          opacity: $faceCardOpacity)
-                .matchedGeometryEffect(id: showMiniCard ? "minimise" : "", in: miniCardAnimation, properties: .position, isSource: false)
+            .matchedGeometryEffect(id: showMiniCard ? "minimise" : "", in: miniCardAnimation, properties: .position, isSource: false)
             CardBackView(cardLayout: CardStore.mediumCardLayout,
                          cardBack: CardStore.mediumCardBack,
                          degree: $cardFlipAnimator.backDegree)
         }
         .border(.black)
         .frame(width: CardStore.mediumCardLayout.width, height: CardStore.mediumCardLayout.height)
+        .fixedSize()
     }
-
+    
     @ViewBuilder private func connectingStatusView(_ statusText: String, buttonText: String, action: @escaping () -> Void) -> some View {
-        Text(statusText)
-            .padding(.vertical)
-            .multilineTextAlignment(.center)
-        gameButtonView(text: buttonText, action: action)
+        Group {
+            Text(statusText)
+                .padding(.vertical)
+                .multilineTextAlignment(.center)
+            gameButtonView(text: buttonText, action: action)
+        }
+        .fixedSize()
     }
     
     @ViewBuilder private func gameResultView(_ result: Bool) -> some View {
@@ -153,11 +160,10 @@ struct GameView: View {
                     .padding(.vertical)
                     .multilineTextAlignment(.center)
                 Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
-                    .padding(.vertical)
                     .multilineTextAlignment(.center)
             }.position(x: proxy.frame(in: .local).midX,
                        y: proxy.frame(in: .local).midY)
-                .border(.green)
+            .border(.green)
         }
     }
     
@@ -173,6 +179,7 @@ struct GameView: View {
         .tint(GameUx.brandColor())
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.capsule)
+        .fixedSize()
     }
 }
 
@@ -183,7 +190,7 @@ extension GameView {
         animatingHUDView(showDefault: false)
             .padding(.horizontal, 20)
         boardRepresentableView()
-                .border(.red)
+            .border(.red)
     }
     
     @ViewBuilder private func boardRepresentableView() -> some View {
@@ -230,16 +237,18 @@ extension GameView {
                 .matchedGeometryEffect(id: "minimise", in: miniCardAnimation, properties: .frame, isSource: true)
         }
         .padding(.horizontal)
+        .fixedSize()
     }
     
     @ViewBuilder private func player2HUDView() -> some View {
         VStack {
             Text(GameStrings.player2)
                 .frame(height: 25)
-            ColorGridView(colors: CardStore.defaultBoardColors, displayDefault: true)
+            ColorGridView(colors: gameManager.opponentColors, displayDefault: false)
                 .frame(width: 50, height: 50)
         }
         .padding(.horizontal)
+        .fixedSize()
     }
 }
 

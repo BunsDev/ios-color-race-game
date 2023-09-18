@@ -39,4 +39,12 @@ internal struct GameColors {
             GameColors.white(), GameColors.blue(), GameColors.orange(), GameColors.yellow(), GameColors.green(), GameColors.red()
         ]
     }
+    
+    static func defaultColors() -> [[UIColor]] {
+        [
+            [GameColors.white(), GameColors.white(), GameColors.white()],
+            [GameColors.white(), GameColors.white(), GameColors.white()],
+            [GameColors.white(), GameColors.white(), GameColors.white()]
+        ]
+    }
 }

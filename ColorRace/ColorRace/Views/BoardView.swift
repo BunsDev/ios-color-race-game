@@ -89,7 +89,6 @@ extension BoardView: BoardTileViewDelegate {
                 DispatchQueue.main.async { [weak self] in
                     self?.delegate?.userWon()
                 }
-                // TODO: Be notified of losing event
             }
         }
     }
