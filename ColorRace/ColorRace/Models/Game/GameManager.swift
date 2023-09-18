@@ -76,10 +76,12 @@ extension GameManager {
 
     private func startNextRoundTimer() {
         secondsToNextRound = 3
+        stopNextRoundTimer()
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateNextRoundTimer), userInfo: nil, repeats: true)
     }
     
     @objc private func updateNextRoundTimer() {
+        print("(a) seconds to next round...\(secondsToNextRound)")
         guard secondsToNextRound > 0 else {
             stopNextRoundTimer()
             loadNextRound()
@@ -87,6 +89,7 @@ extension GameManager {
         }
         
         secondsToNextRound -= 1
+        print("(b) seconds to next round...\(secondsToNextRound)")
     }
 
     private func stopNextRoundTimer() {

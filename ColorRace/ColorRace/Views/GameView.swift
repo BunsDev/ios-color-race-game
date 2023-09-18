@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-// TODO: Fix issue where user joins a game, then backs out, then joins a game and loses. The game keeps resetting
+
 struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
@@ -66,9 +66,9 @@ struct GameView: View {
         case .playing:
             boardView()
         case .userWon:
-            resultView(true)
+            gameResultView(true)
         case .userLost:
-            resultView(false)
+            gameResultView(false)
         }
     }
     
@@ -134,7 +134,7 @@ struct GameView: View {
         gameButtonView(text: buttonText, action: action)
     }
     
-    @ViewBuilder private func resultView(_ result: Bool) -> some View {
+    @ViewBuilder private func gameResultView(_ result: Bool) -> some View {
         VStack {
             ZStack {
                 LottieViewRepresentable(filename: "animation_losing", loopMode: .playOnce)
@@ -142,34 +142,6 @@ struct GameView: View {
                     .frame(width: 150, height: 150)
             }
             Text(result ? GameStrings.userWon : GameStrings.userLost)
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
-            Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
-        }
-    }
-    
-    @ViewBuilder private func userWonView() -> some View {
-        VStack {
-            Image(systemName: "trophy.circle.fill")
-                .font(GameUx.fontWithSize(120))
-                .padding(.vertical)
-            Text(GameStrings.userWon)
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
-            Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
-                .padding(.vertical)
-                .multilineTextAlignment(.center)
-        }
-    }
-    
-    @ViewBuilder private func userLostView() -> some View {
-        VStack {
-            Image(systemName: "medal.fill")
-                .font(GameUx.fontWithSize(80))
-                .padding(.vertical)
-            Text(GameStrings.userLost)
                 .padding(.vertical)
                 .multilineTextAlignment(.center)
             Text(GameStrings.nextRound + "\(gameManager.secondsToNextRound)")
