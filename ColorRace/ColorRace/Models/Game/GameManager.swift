@@ -39,6 +39,7 @@ final class GameManager: ObservableObject {
                 print("gm: received socket event: \(socketState)")
                 self?.updateGameState(forSocketState: socketState)
             }
+        setupBoard()// TODO: remove
     }
     
     deinit {
@@ -81,7 +82,6 @@ extension GameManager {
     }
     
     @objc private func updateNextRoundTimer() {
-        print("(a) seconds to next round...\(secondsToNextRound)")
         guard secondsToNextRound > 0 else {
             stopNextRoundTimer()
             loadNextRound()
@@ -89,7 +89,6 @@ extension GameManager {
         }
         
         secondsToNextRound -= 1
-        print("(b) seconds to next round...\(secondsToNextRound)")
     }
 
     private func stopNextRoundTimer() {

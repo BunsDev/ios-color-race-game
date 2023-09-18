@@ -18,7 +18,7 @@ struct GameView: View {
     @State private var userWon: Bool = false
     @State private var faceCardOpacity = 1.0
     @Namespace private var miniCardAnimation
-    private let hudViewHeight = 100.0
+    private let hudViewHeight = 75.0
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font : GameUx.navigationFont(), .foregroundColor: GameUx.brandUIColor()]
