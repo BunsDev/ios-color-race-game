@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 protocol BoardViewDelegate: AnyObject {
+    func userTappedTile(row: Int, col: Int, color: UIColor)
     func userWon()
 }
 
@@ -76,7 +77,9 @@ extension BoardView: BoardTileViewDelegate {
 
         let row = index / tilesPerRow
         let col = index % tilesPerRow
-
+        print("selected tile [\(row)][\(col)]")
+        self.delegate?.userTappedTile(row: row, col: col, color: color)
+        
         if boardColors[row][col] == color {
 
             let allMatch = tileContainerView.subviews.enumerated().allSatisfy { (index, subview) in

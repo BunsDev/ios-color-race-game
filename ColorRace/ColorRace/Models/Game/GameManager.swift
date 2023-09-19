@@ -29,7 +29,7 @@ final class GameManager: ObservableObject {
     /// Game board
     private let boardTileColors: [UIColor] = GameColors.allColors()
     var boardColors: [[UIColor]] = []
-    @Published var opponentColors: [[UIColor]] = []
+    @Published var opponentColors: [[UIColor]] = GameColors.defaultColors()
     
     init() {
         self.socketManager = SocketManager(socketURL: socketURL, config: [.log(loggingEnabled), .compress])
@@ -73,6 +73,10 @@ extension GameManager {
     
     func userLostGame() {
         startNextRoundTimer()
+    }
+    
+    func userSelection(_ selection: TileSelection) {
+        sendUserSelectionOnConnection(selection)
     }
     
     private func startNextRoundTimer() {
@@ -212,7 +216,22 @@ extension GameManager {
                 self?.socketState = .userLost
             }
         }
-        
+
+        socket?.on(SocketEvents.userSelection) { [weak self] data, _ in
+            guard let data = data.first as? [String: Any], let namespace = data["namespace"] else {
+                print("client => received event: \(SocketEvents.userWon), failed to read namespace")
+                return
+            }
+            
+            if let socketId = self?.socket?.sid, socketId == data["socketId"] as? String {
+                print("client => received event: \(SocketEvents.userSelection), socket id(self):\(data)")
+            } else {
+                if let row = data["row"] as? Int, let col = data["col"] as? Int, let color = data["color"] as? String {
+                    print("client => received event: \(SocketEvents.userSelection), socket id(other):\(data)")
+                    self?.opponentColors[row][col] = UIColor(hexString: color) ?? .white
+                }
+            }
+        }
     }
     
     private func establishConnection() {
@@ -237,5 +256,15 @@ extension GameManager {
             return
         }
         socket?.emit(SocketEvents.userWon, namespace)
+    }
+    
+    private func sendUserSelectionOnConnection(_ selection: TileSelection) {
+        guard let namespace = namespace else {
+            socket?.disconnect()
+            return
+        }
+        let colorAsHex = selection.color.toHex() ?? ""
+        let data = ["color": colorAsHex, "row": selection.row, "col": selection.col, "namespace": namespace] as [String : Any]
+        socket?.emit(SocketEvents.userSelection, data)
     }
 }

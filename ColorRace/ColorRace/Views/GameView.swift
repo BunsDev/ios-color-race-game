@@ -8,6 +8,12 @@
 import Foundation
 import SwiftUI
 
+struct TileSelection: Equatable {
+    var row: Int
+    var col: Int
+    var color: UIColor
+}
+
 struct GameView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedObject private var gameManager = GameManager()
@@ -17,6 +23,7 @@ struct GameView: View {
     @State private var showMiniCard = false
     @State private var userWon: Bool = false
     @State private var faceCardOpacity = 1.0
+    @State private var tileSelection = TileSelection(row: 0, col: 0, color: .white)
     @Namespace private var miniCardAnimation
     private let hudViewHeight = 75.0
     private let hudVerticalPadding = 20.0
@@ -194,7 +201,7 @@ extension GameView {
     }
     
     @ViewBuilder private func boardRepresentableView() -> some View {
-        BoardViewRepresentable(userWon: $userWon, boardColors: $gameManager.boardColors)
+        BoardViewRepresentable(userWon: $userWon, tileSelection: $tileSelection, boardColors: $gameManager.boardColors)
             .offset(y: showGameBoard ? 0 : UIScreen.main.bounds.size.height)
             .transition(.slide)
             .animation(.spring(dampingFraction: 0.6), value: showGameBoard)
@@ -202,6 +209,10 @@ extension GameView {
             .onChange(of: userWon) { newValue in
                 print("boardRepresentableView \(newValue)")
                 gameManager.userWonGame()
+            }
+            .onChange(of: tileSelection) { newValue in
+                print("boardRepresentableView selection [\(newValue.row)][\(newValue.col)], color: \(newValue.color)")
+                gameManager.userSelection(TileSelection(row: newValue.row, col: newValue.col, color: newValue.color))
             }
             .onAppear {
                 showGameBoard = true
