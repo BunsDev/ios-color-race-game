@@ -210,6 +210,7 @@ io.on('connection', (socket) => {
     // Transmit the received data back to the same namespace
     const namespaceName = findNamespaceByUser(socket.id);
     if (namespaceName) {
+      console.log(`=> Found namespace ${namespaceName}`);
       console.log(`=> Transmitting user input on namespace ${data.namespace}, row: ${data.row}, col: ${data.col} , color: ${data.color}`);
       io.in(namespaceName).emit('userSelection', data);
     }
