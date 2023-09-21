@@ -9,15 +9,12 @@ import Foundation
 import UIKit
 
 protocol BoardViewDelegate: AnyObject {
-    func userTappedTile(row: Int, col: Int, color: UIColor)
     func userWon()
+    func userTappedTile(row: Int, col: Int, color: UIColor)
 }
 
 class BoardView: UIView {
     weak var delegate: BoardViewDelegate?
-    private let dropBehavior = FallingObjectBehavior()
-    private lazy var animator: UIDynamicAnimator = UIDynamicAnimator(referenceView: self)
-    
     private let tilesPerRow = 3
     private let tileSize = CGSize(width: 100, height: 100)
     private let tileContainerView = UIView()
@@ -32,16 +29,6 @@ class BoardView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    var animating: Bool = false {
-        didSet {
-            if animating {
-                animator.addBehavior(dropBehavior)
-            } else {
-                animator.removeBehavior(dropBehavior)
-            }
-        }
     }
     
     override func layoutSubviews() {

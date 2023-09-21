@@ -29,8 +29,6 @@
 		E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65B2A9DD04A00C58FA4 /* GameUx.swift */; };
 		E497A6602A9DD34B00C58FA4 /* GameFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */; };
 		E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */; };
-		E4A1C44B2A9A299A00116F58 /* FallingObjectBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A1C44A2A9A299A00116F58 /* FallingObjectBehavior.swift */; };
-		E4AC1A1D2AAAD8A30017FCC1 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AC1A1C2AAAD8A30017FCC1 /* ConfettiView.swift */; };
 		E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B392A93610000ACF69B /* GameState.swift */; };
 		E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B612A9388AE00ACF69B /* GameStrings.swift */; };
 		E4AD1B642A93934500ACF69B /* CardBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B632A93934500ACF69B /* CardBackView.swift */; };
@@ -67,8 +65,6 @@
 		E497A65B2A9DD04A00C58FA4 /* GameUx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUx.swift; sourceTree = "<group>"; };
 		E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFontConfig.swift; sourceTree = "<group>"; };
 		E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketConnectionState.swift; sourceTree = "<group>"; };
-		E4A1C44A2A9A299A00116F58 /* FallingObjectBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingObjectBehavior.swift; sourceTree = "<group>"; };
-		E4AC1A1C2AAAD8A30017FCC1 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		E4AD1B392A93610000ACF69B /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		E4AD1B612A9388AE00ACF69B /* GameStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStrings.swift; sourceTree = "<group>"; };
 		E4AD1B632A93934500ACF69B /* CardBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackView.swift; sourceTree = "<group>"; };
@@ -184,8 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				E48548C02AA2EFC6009803AD /* CardFlipAnimator.swift */,
-				E4A1C44A2A9A299A00116F58 /* FallingObjectBehavior.swift */,
-				E4AC1A1C2AAAD8A30017FCC1 /* ConfettiView.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -340,7 +334,6 @@
 				E497A6582A9DBC1700C58FA4 /* SocketEvents.swift in Sources */,
 				E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */,
 				E44729862A91049800883867 /* CardLoadingView.swift in Sources */,
-				E4A1C44B2A9A299A00116F58 /* FallingObjectBehavior.swift in Sources */,
 				E4AD1B662A93937900ACF69B /* CardFaceView.swift in Sources */,
 				E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */,
 				E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */,
@@ -355,7 +348,6 @@
 				E48640742AB45F880081A39B /* LottieViewRepresentable.swift in Sources */,
 				E497A6602A9DD34B00C58FA4 /* GameFontConfig.swift in Sources */,
 				E44729842A9103FB00883867 /* CardView.swift in Sources */,
-				E4AC1A1D2AAAD8A30017FCC1 /* ConfettiView.swift in Sources */,
 				E466B6992A91C0B70023FFC4 /* Card.swift in Sources */,
 				E4EB237A2A9B41000014F1C9 /* BoardView.swift in Sources */,
 				E4AD1B642A93934500ACF69B /* CardBackView.swift in Sources */,

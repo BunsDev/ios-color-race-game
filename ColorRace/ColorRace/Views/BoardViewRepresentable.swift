@@ -30,15 +30,7 @@ struct BoardViewRepresentable: UIViewRepresentable {
         BoardViewCoordinator(self)
     }
 
-    private func applyGravityAndCollisionBehavior(to uiView: BoardView) {
-        uiView.animating = true
-    }
-    
     class BoardViewCoordinator: BoardViewDelegate  {
-        func userTappedTile(row: Int, col: Int, color: UIColor) {
-            self.parent.tileSelection = TileSelection(row: row, col: col, color: color)
-        }
-        
         var parent: BoardViewRepresentable
         
         init(_ parent: BoardViewRepresentable) {
@@ -47,6 +39,10 @@ struct BoardViewRepresentable: UIViewRepresentable {
 
         func userWon() {
             self.parent.userWon = true
+        }
+        
+        func userTappedTile(row: Int, col: Int, color: UIColor) {
+            self.parent.tileSelection = TileSelection(row: row, col: col, color: color)
         }
     }
 }
