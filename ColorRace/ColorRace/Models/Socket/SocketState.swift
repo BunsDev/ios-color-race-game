@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal enum SocketState {
+enum SocketState {
     case disconnected
     case connectingToServer
     case userConnected

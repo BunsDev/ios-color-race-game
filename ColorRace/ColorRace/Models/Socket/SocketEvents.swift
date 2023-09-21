@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal struct SocketEvents {
+struct SocketEvents {
     static let userConnected        = "userConnected"
     static let userJoined           = "userJoined"
     static let gameStarted          = "gameStarted"

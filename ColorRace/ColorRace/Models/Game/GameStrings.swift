@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal struct GameStrings {
+struct GameStrings {
     static let title = "Color Race"
     static let enter = "Enter"
     static let close = "X"

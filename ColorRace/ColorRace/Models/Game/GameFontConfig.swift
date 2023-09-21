@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal struct GameFontConfig {
+struct GameFontConfig {
     static let font: String = "Handlee"
     static let titleFontSize: CGFloat = 50
     static let subtitleFontSize: CGFloat = 20

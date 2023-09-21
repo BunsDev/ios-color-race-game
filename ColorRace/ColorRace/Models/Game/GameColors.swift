@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-internal struct GameColors {
+struct GameColors {
     
     static func blue() -> UIColor {
         UIColor(red: 77/255, green: 85/255, blue: 240/255, alpha: 1.0)

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal struct GameUx {
+struct GameUx {
     
     static func fontWithSize(_ size: CGFloat) -> Font {
         Font.custom(GameFontConfig.font, size: size)
