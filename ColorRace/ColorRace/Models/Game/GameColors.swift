@@ -34,17 +34,13 @@ struct GameColors {
         UIColor.white
     }
     
-    static func allColors() -> [UIColor] {
+    static func paletteColors() -> [UIColor] {
         [
             GameColors.white(), GameColors.blue(), GameColors.orange(), GameColors.yellow(), GameColors.green(), GameColors.red()
         ]
     }
     
     static func defaultColors() -> [[UIColor]] {
-        [
-            [GameColors.white(), GameColors.white(), GameColors.white()],
-            [GameColors.white(), GameColors.white(), GameColors.white()],
-            [GameColors.white(), GameColors.white(), GameColors.white()]
-        ]
+        Array(repeating: Array(repeating: GameColors.white(), count: 3), count: 3)
     }
 }

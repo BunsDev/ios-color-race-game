@@ -18,7 +18,7 @@ class BoardView: UIView {
     private let tilesPerRow = 3
     private let tileSize = CGSize(width: 100, height: 100)
     private let tileContainerView = UIView()
-    private let tileColors: [UIColor] = GameColors.allColors()
+    private let tileColors: [UIColor] = GameColors.paletteColors()
     private var boardColors: [[UIColor]]
 
     init(frame: CGRect, boardColors: [[UIColor]]) {
