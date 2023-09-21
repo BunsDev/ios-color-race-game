@@ -160,7 +160,7 @@ struct GameView: View {
             .padding(.horizontal, 20)
         GeometryReader { proxy in
             VStack {
-                LottieViewRepresentable(filename: "animation_losing", loopMode: .playOnce)
+                LottieViewRepresentable(filename: "result_animation", loopMode: .playOnce)
                     .rotationEffect(.degrees(result ? 180 : 0))
                     .frame(width: 150, height: 150)
                 Text(result ? GameStrings.userWon : GameStrings.userLost)

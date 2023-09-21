@@ -20,9 +20,7 @@
 		E48548C12AA2EFC6009803AD /* CardFlipAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48548C02AA2EFC6009803AD /* CardFlipAnimator.swift */; };
 		E48640722AB45F4C0081A39B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E48640712AB45F4C0081A39B /* Lottie */; };
 		E48640742AB45F880081A39B /* LottieViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48640732AB45F880081A39B /* LottieViewRepresentable.swift */; };
-		E48640792AB462AE0081A39B /* animation_lose.json in Resources */ = {isa = PBXBuildFile; fileRef = E48640762AB462AE0081A39B /* animation_lose.json */; };
-		E486407A2AB462AE0081A39B /* animation_losing.json in Resources */ = {isa = PBXBuildFile; fileRef = E48640772AB462AE0081A39B /* animation_losing.json */; };
-		E486407B2AB462AE0081A39B /* confetti_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = E48640782AB462AE0081A39B /* confetti_animation.json */; };
+		E486407A2AB462AE0081A39B /* result_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = E48640772AB462AE0081A39B /* result_animation.json */; };
 		E48ED2382AA70EB700070908 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E48ED2372AA70EB700070908 /* Preview Assets.xcassets */; };
 		E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48ED2392AA728AE00070908 /* UIImage+Color.swift */; };
 		E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A5F92A9DA11F00C58FA4 /* GameManager.swift */; };
@@ -60,9 +58,7 @@
 		E47272D82AB2B81F005FBA25 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		E48548C02AA2EFC6009803AD /* CardFlipAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFlipAnimator.swift; sourceTree = "<group>"; };
 		E48640732AB45F880081A39B /* LottieViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieViewRepresentable.swift; sourceTree = "<group>"; };
-		E48640762AB462AE0081A39B /* animation_lose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = animation_lose.json; sourceTree = "<group>"; };
-		E48640772AB462AE0081A39B /* animation_losing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = animation_losing.json; sourceTree = "<group>"; };
-		E48640782AB462AE0081A39B /* confetti_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = confetti_animation.json; sourceTree = "<group>"; };
+		E48640772AB462AE0081A39B /* result_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = result_animation.json; sourceTree = "<group>"; };
 		E48ED2372AA70EB700070908 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E48ED2392AA728AE00070908 /* UIImage+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
 		E497A5F92A9DA11F00C58FA4 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
@@ -143,9 +139,7 @@
 		E48640752AB462980081A39B /* LottieAnimations */ = {
 			isa = PBXGroup;
 			children = (
-				E48640762AB462AE0081A39B /* animation_lose.json */,
-				E48640772AB462AE0081A39B /* animation_losing.json */,
-				E48640782AB462AE0081A39B /* confetti_animation.json */,
+				E48640772AB462AE0081A39B /* result_animation.json */,
 			);
 			path = LottieAnimations;
 			sourceTree = "<group>";
@@ -324,11 +318,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E486407A2AB462AE0081A39B /* animation_losing.json in Resources */,
+				E486407A2AB462AE0081A39B /* result_animation.json in Resources */,
 				E48ED2382AA70EB700070908 /* Preview Assets.xcassets in Resources */,
-				E48640792AB462AE0081A39B /* animation_lose.json in Resources */,
 				E43477FA2A9CC4CC00054C0C /* Handlee-Regular.ttf in Resources */,
-				E486407B2AB462AE0081A39B /* confetti_animation.json in Resources */,
 				E43477FB2A9CC4CC00054C0C /* OFL.txt in Resources */,
 				E4AD996F2A8C8A9F00909E38 /* Assets.xcassets in Resources */,
 			);
