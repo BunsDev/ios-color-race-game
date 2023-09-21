@@ -263,7 +263,10 @@ extension GameManager {
             socket?.disconnect()
             return
         }
-        let colorAsHex = selection.color.toHex() ?? ""
+        guard let colorAsHex = selection.color.toHex() else {
+            return
+        }
+
         let data = ["color": colorAsHex, "row": selection.row, "col": selection.col, "namespace": namespace] as [String : Any]
         socket?.emit(SocketEvents.userSelection, data)
     }

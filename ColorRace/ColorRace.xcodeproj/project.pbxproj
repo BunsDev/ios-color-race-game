@@ -22,7 +22,7 @@
 		E48640742AB45F880081A39B /* LottieViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48640732AB45F880081A39B /* LottieViewRepresentable.swift */; };
 		E486407A2AB462AE0081A39B /* result_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = E48640772AB462AE0081A39B /* result_animation.json */; };
 		E48ED2382AA70EB700070908 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E48ED2372AA70EB700070908 /* Preview Assets.xcassets */; };
-		E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48ED2392AA728AE00070908 /* UIImage+Color.swift */; };
+		E48ED23A2AA728AE00070908 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48ED2392AA728AE00070908 /* UIColor+Hex.swift */; };
 		E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A5F92A9DA11F00C58FA4 /* GameManager.swift */; };
 		E497A6582A9DBC1700C58FA4 /* SocketEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A6572A9DBC1700C58FA4 /* SocketEvents.swift */; };
 		E497A65A2A9DCF7500C58FA4 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A6592A9DCF7500C58FA4 /* GameView.swift */; };
@@ -58,7 +58,7 @@
 		E48640732AB45F880081A39B /* LottieViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieViewRepresentable.swift; sourceTree = "<group>"; };
 		E48640772AB462AE0081A39B /* result_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = result_animation.json; sourceTree = "<group>"; };
 		E48ED2372AA70EB700070908 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E48ED2392AA728AE00070908 /* UIImage+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
+		E48ED2392AA728AE00070908 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		E497A5F92A9DA11F00C58FA4 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		E497A6572A9DBC1700C58FA4 /* SocketEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketEvents.swift; sourceTree = "<group>"; };
 		E497A6592A9DCF7500C58FA4 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		E48ED23B2AA72D3600070908 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E48ED2392AA728AE00070908 /* UIImage+Color.swift */,
+				E48ED2392AA728AE00070908 /* UIColor+Hex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 				E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */,
 				E44729862A91049800883867 /* CardLoadingView.swift in Sources */,
 				E4AD1B662A93937900ACF69B /* CardFaceView.swift in Sources */,
-				E48ED23A2AA728AE00070908 /* UIImage+Color.swift in Sources */,
+				E48ED23A2AA728AE00070908 /* UIColor+Hex.swift in Sources */,
 				E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */,
 				E4AD996D2A8C8A9800909E38 /* ContentView.swift in Sources */,
 				E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */,
