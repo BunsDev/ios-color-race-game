@@ -24,7 +24,7 @@ final class GameManager: ObservableObject {
     private let socketURL = URL(string: "http://localhost:3000")!
     private var namespace: String?
     private let loggingEnabled: Bool = false
-    @Published private var socketState = SocketConnectionState.disconnected
+    @Published private var socketState = SocketState.disconnected
     
     /// Game board
     private let boardTileColors: [UIColor] = GameColors.allColors()
@@ -117,7 +117,7 @@ extension GameManager {
         print(boardColors)
     }
     
-    private func updateGameState(forSocketState socketState: SocketConnectionState) {
+    private func updateGameState(forSocketState socketState: SocketState) {
         switch socketState {
             
         case .disconnected, .userDisconnected:

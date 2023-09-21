@@ -8,11 +8,11 @@
 import Foundation
 
 internal struct SocketEvents {
-    static let userConnected = "userConnected"
-    static let userJoined = "userJoined"
-    static let gameStarted = "gameStarted"
-    static let userDisconnected = "userDisconnected"
-    static let disconnectNamespace = "disconnectNamespace"
-    static let userWon = "userWon"
-    static let userSelection = "userSelection"
+    static let userConnected        = "userConnected"
+    static let userJoined           = "userJoined"
+    static let gameStarted          = "gameStarted"
+    static let userDisconnected     = "userDisconnected"
+    static let disconnectNamespace  = "disconnectNamespace"
+    static let userWon              = "userWon"
+    static let userSelection        = "userSelection"
 }

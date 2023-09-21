@@ -28,7 +28,7 @@
 		E497A65A2A9DCF7500C58FA4 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A6592A9DCF7500C58FA4 /* GameView.swift */; };
 		E497A65C2A9DD04A00C58FA4 /* GameUx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65B2A9DD04A00C58FA4 /* GameUx.swift */; };
 		E497A6602A9DD34B00C58FA4 /* GameFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */; };
-		E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */; };
+		E49DC3CE2AA5F3FD007EC847 /* SocketState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49DC3CD2AA5F3FD007EC847 /* SocketState.swift */; };
 		E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B392A93610000ACF69B /* GameState.swift */; };
 		E4AD1B622A9388AE00ACF69B /* GameStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B612A9388AE00ACF69B /* GameStrings.swift */; };
 		E4AD1B642A93934500ACF69B /* CardBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD1B632A93934500ACF69B /* CardBackView.swift */; };
@@ -64,7 +64,7 @@
 		E497A6592A9DCF7500C58FA4 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		E497A65B2A9DD04A00C58FA4 /* GameUx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUx.swift; sourceTree = "<group>"; };
 		E497A65F2A9DD34B00C58FA4 /* GameFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFontConfig.swift; sourceTree = "<group>"; };
-		E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketConnectionState.swift; sourceTree = "<group>"; };
+		E49DC3CD2AA5F3FD007EC847 /* SocketState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketState.swift; sourceTree = "<group>"; };
 		E4AD1B392A93610000ACF69B /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		E4AD1B612A9388AE00ACF69B /* GameStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStrings.swift; sourceTree = "<group>"; };
 		E4AD1B632A93934500ACF69B /* CardBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackView.swift; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 		E48ED23F2AA72F4D00070908 /* Socket */ = {
 			isa = PBXGroup;
 			children = (
-				E49DC3CD2AA5F3FD007EC847 /* SocketConnectionState.swift */,
+				E49DC3CD2AA5F3FD007EC847 /* SocketState.swift */,
 				E497A6572A9DBC1700C58FA4 /* SocketEvents.swift */,
 			);
 			path = Socket;
@@ -341,7 +341,7 @@
 				E497A5FA2A9DA11F00C58FA4 /* GameManager.swift in Sources */,
 				E4FAF20D2AB31A3C00F67CB7 /* GameColors.swift in Sources */,
 				E4EB23762A9B20F50014F1C9 /* BoardViewRepresentable.swift in Sources */,
-				E49DC3CE2AA5F3FD007EC847 /* SocketConnectionState.swift in Sources */,
+				E49DC3CE2AA5F3FD007EC847 /* SocketState.swift in Sources */,
 				E48548C12AA2EFC6009803AD /* CardFlipAnimator.swift in Sources */,
 				E4AD996B2A8C8A9800909E38 /* ColorRaceApp.swift in Sources */,
 				E4AD1B3A2A93610000ACF69B /* GameState.swift in Sources */,
