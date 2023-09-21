@@ -34,7 +34,7 @@ final class GameManager: ObservableObject {
     init() {
         self.socketManager = SocketManager(socketURL: socketURL, config: [.log(loggingEnabled), .compress])
         self.socket = socketManager?.defaultSocket
-        self.gameState = .disconnected(joinText: GameStrings.joinGame)
+        self.gameState = .disconnected(text: GameStrings.joinGame)
         self.cancellable = $socketState
             .sink { [weak self] socketState in
                 print("gm: received socket event: \(socketState)")
@@ -101,7 +101,7 @@ extension GameManager {
     
     private func loadNextRound() {
         setupBoard()
-        gameState = .preparingGame
+        gameState = .preparingGame(text: GameStrings.opponentFound)
     }
     
     private func setupBoard() {
@@ -118,23 +118,24 @@ extension GameManager {
     }
     
     private func updateGameState(forSocketState socketState: SocketState) {
+
         switch socketState {
             
         case .disconnected, .userDisconnected:
-            gameState = .disconnected(joinText: GameStrings.joinGame)
+            gameState = .disconnected(text: GameStrings.joinGame)
             
         case .userConnected, .userJoined, .opponentDisconnected:
-            gameState = .connectingToOpponent(connectionText: GameStrings.waitingForOpponent)
+            gameState = .connectingToOpponent(text: GameStrings.waitingForOpponent)
             
         case .opponentJoined:
-            gameState = (gameState == .playing || gameState == .preparingGame) ? gameState : .connectingToOpponent(connectionText: GameStrings.waitingForOpponent)
-            
+            gameState = gameState.userIsInGame ? gameState : .connectingToOpponent(text: GameStrings.waitingForOpponent)
+
         case .gameStarted:
             setupBoard()
-            gameState = .preparingGame
+            gameState = .preparingGame(text: GameStrings.opponentFound)
             
         case .connectingToServer:
-            gameState = .connectingToServer(connectionText: GameStrings.connectingToServer)
+            gameState = .connectingToServer(text: GameStrings.connectingToServer)
             
         case .userLost:
             gameState = .userLost

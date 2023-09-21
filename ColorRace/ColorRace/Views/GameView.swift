@@ -65,12 +65,12 @@ struct GameView: View {
     
     @ViewBuilder private func gameView() -> some View {
         switch gameManager.gameState {
-        case .disconnected(let text), .failure(let text):
+        case .disconnected(let text):
             joinGameView(text)
         case .connectingToServer(let text), .connectingToOpponent(let text):
             connectingView(text)
-        case .preparingGame:
-            connectedView(GameStrings.opponentFound)
+        case .preparingGame(let text):
+            connectedView(text)
         case .playing:
             boardView()
         case .userWon:
